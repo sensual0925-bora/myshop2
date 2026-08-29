@@ -1,0 +1,12 @@
+# 편집기/OS 부산물
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# 상품 원본 데이터 (개인 스토어 내보내기)
+*.csv
+
+# 재고장 (대외비 - 컴퓨터에만 보관)
+inventory.html
