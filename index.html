@@ -71,11 +71,20 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
+      max-width: 1260px;
+      margin: 0 auto;
       padding: 0 20px 20px 20px;
     }
     main {
       flex: 1;
       min-width: 0;
+    }
+    /* 넓은 화면: 오른쪽에도 메뉴만큼 빈 공간을 둬서 상품이 화면 정가운데 오게 */
+    @media (min-width: 1300px) {
+      .layout::after {
+        content: "";
+        flex: 0 0 170px;
+      }
     }
 
     /* ===== 메뉴 (왼쪽 세로 배치) ===== */
@@ -127,6 +136,8 @@
     /* ===== 배너 ===== */
     .banner {
       background-color: transparent;
+      max-width: 900px;
+      margin: 0 auto;
       text-align: left;
       padding: 4px 0 18px 0;
     }
@@ -146,6 +157,7 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 18px;
       max-width: 900px;
+      margin: 0 auto;
       padding: 6px 0 40px 0;
     }
     .card {
@@ -270,7 +282,7 @@
     /* ===== 쇼핑몰 소개 + 이용 안내 ===== */
     .about {
       max-width: 900px;
-      margin: 0 0 40px 0;
+      margin: 0 auto 40px auto;
       padding: 34px 30px;
       border-radius: 14px;
       background-color: rgba(255, 255, 255, 0.82);
@@ -389,6 +401,7 @@
         grid-template-columns: repeat(3, 1fr);
         max-width: 700px;
       }
+      .banner,
       .about {
         max-width: 700px;
       }
@@ -417,6 +430,7 @@
         grid-template-columns: repeat(2, 1fr);
         max-width: none;
       }
+      .banner,
       .about {
         max-width: none;
       }
@@ -458,10 +472,10 @@
         <p>가을맞이 생활용품 최대 40% 할인</p>
       </div>
 
-      <!-- 상품 카드 (직접 추가 3개 + 스마트스토어 36개 = 39개) -->
+      <!-- 상품 카드 (스마트스토어 상품 41개 / 2026-09-15 엑셀 기준) -->
       <div class="products">
 
-    <!-- 정렬 기준: 트렌드 키워드 점수 내림차순 (data-trend-rank), 상위 10개에 트렌드상품 배지 -->
+    <!-- 정렬 기준: 트렌드 상위 10개(트렌드상품 배지) → 신상품 → 나머지 -->
 
     <div class="card" data-name="달걀보관함 계란트레이 3단 30구 냉장고 정리함 오토폴딩 보관날짜" data-category="주방용품" data-trend-rank="1">
       <div class="badges">
@@ -485,7 +499,7 @@
         <img src="https://shop-phinf.pstatic.net/20260828_250/1787883499177fiSWd_JPEG/122016302294139706_937518472.jpg?type=f300_300" alt="CJ 스팸복합 복 에디션 1세트 추석선물세트 스팸 식용유 소금 명절 답례품" loading="lazy">
       </a>
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13736819038" target="_blank" rel="noopener" title="CJ 스팸복합 복 에디션 1세트 추석선물세트 스팸 식용유 소금 명절 답례품">CJ 스팸복합 복 에디션 1세트 추석선물세트 스팸 식용유 소금 명절 답례품</a></h3>
-      <span class="new-price">46,000원</span>
+      <span class="new-price">70,000원</span>
       <br>
       <button onclick="addCart(this)">장바구니</button>
     </div>
@@ -499,7 +513,7 @@
         <img src="https://shop-phinf.pstatic.net/20260828_184/1787883509693MN76b_JPEG/122016312808773660_1153998569.jpg?type=f300_300" alt="CJ스팸 G호 5세트 추석 선물세트 200g 6개 340g 2개 명절 답례품 기업 학교 가정용" loading="lazy">
       </a>
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13736818839" target="_blank" rel="noopener" title="CJ스팸 G호 5세트 추석 선물세트 200g 6개 340g 2개 명절 답례품 기업 학교 가정용">CJ스팸 G호 5세트 추석 선물세트 200g 6개 340g 2개 명절 답례품 기업 학교 가정용</a></h3>
-      <span class="new-price">210,000원</span>
+      <span class="new-price">280,000원</span>
       <br>
       <button onclick="addCart(this)">장바구니</button>
     </div>
@@ -513,7 +527,7 @@
         <img src="https://shop-phinf.pstatic.net/20260828_250/1787883499177fiSWd_JPEG/122016302294139706_937518472.jpg?type=f300_300" alt="CJ 스팸복합 복 에디션 5세트 추석선물세트 스팸 식용유 소금 명절 답례품" loading="lazy">
       </a>
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13736818731" target="_blank" rel="noopener" title="CJ 스팸복합 복 에디션 5세트 추석선물세트 스팸 식용유 소금 명절 답례품">CJ 스팸복합 복 에디션 5세트 추석선물세트 스팸 식용유 소금 명절 답례품</a></h3>
-      <span class="new-price">220,000원</span>
+      <span class="new-price">310,000원</span>
       <br>
       <button onclick="addCart(this)">장바구니</button>
     </div>
@@ -527,7 +541,7 @@
         <img src="https://shop-phinf.pstatic.net/20260827_118/1787816765912BdKIj_JPEG/79002945711499163_1155857768.jpg?type=f300_300" alt="비비고 초사리곱창돌김 캔김 5세트 추석선물 25g 6캔 기업 학교 가정용 답례품" loading="lazy">
       </a>
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13735951922" target="_blank" rel="noopener" title="비비고 초사리곱창돌김 캔김 5세트 추석선물 25g 6캔 기업 학교 가정용 답례품">비비고 초사리곱창돌김 캔김 5세트 추석선물 25g 6캔 기업 학교 가정용 답례품</a></h3>
-      <span class="new-price">260,000원</span>
+      <span class="new-price">360,000원</span>
       <br>
       <button onclick="addCart(this)">장바구니</button>
     </div>
@@ -541,7 +555,7 @@
         <img src="https://shop-phinf.pstatic.net/20260827_82/1787802309651I6VxJ_JPEG/35046888716211064_185048851.jpg?type=f300_300" alt="엘지선물세트 히말라야 핑크솔트 에센셜 N호 1박스 6개세트 추석선물세트" loading="lazy">
       </a>
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13735690356" target="_blank" rel="noopener" title="엘지선물세트 히말라야 핑크솔트 에센셜 N호 1박스 6개세트 추석선물세트">엘지선물세트 히말라야 핑크솔트 에센셜 N호 1박스 6개세트 추석선물세트</a></h3>
-      <span class="new-price">210,000원</span>
+      <span class="new-price">310,000원</span>
       <br>
       <button onclick="addCart(this)">장바구니</button>
     </div>
@@ -555,7 +569,7 @@
         <img src="https://shop-phinf.pstatic.net/20260827_137/1787792038988zfFKf_JPEG/17792492102173047_1617161878.jpg?type=f300_300" alt="스팸8호 선물세트 200g 9캔 추석명절 선물세트 기업 학교 가정용" loading="lazy">
       </a>
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13735527863" target="_blank" rel="noopener" title="스팸8호 선물세트 200g 9캔 추석명절 선물세트 기업 학교 가정용">스팸8호 선물세트 200g 9캔 추석명절 선물세트 기업 학교 가정용</a></h3>
-      <span class="new-price">45,000원</span>
+      <span class="new-price">62,000원</span>
       <br>
       <button onclick="addCart(this)">장바구니</button>
     </div>
@@ -569,7 +583,7 @@
         <img src="https://shop-phinf.pstatic.net/20260827_237/1787792025607n6zep_JPEG/8501153201930505_1547529025.jpg?type=f300_300" alt="엘지선물세트 생활의 품격 ON호 명절 추석 5종 선물세트 기업 가정 학교" loading="lazy">
       </a>
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13735527741" target="_blank" rel="noopener" title="엘지선물세트 생활의 품격 ON호 명절 추석 5종 선물세트 기업 가정 학교">엘지선물세트 생활의 품격 ON호 명절 추석 5종 선물세트 기업 가정 학교</a></h3>
-      <span class="new-price">25,000원</span>
+      <span class="new-price">28,000원</span>
       <br>
       <button onclick="addCart(this)">장바구니</button>
     </div>
@@ -583,7 +597,7 @@
         <img src="https://shop-phinf.pstatic.net/20260827_226/1787792015460aUCnQ_JPEG/121924784600137527_739745683.jpg?type=f300_300" alt="동원 S12호 참치선물세트 90g 12캔 명절 추석 선물세트 기업 학교 가정용" loading="lazy">
       </a>
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13735527576" target="_blank" rel="noopener" title="동원 S12호 참치선물세트 90g 12캔 명절 추석 선물세트 기업 학교 가정용">동원 S12호 참치선물세트 90g 12캔 명절 추석 선물세트 기업 학교 가정용</a></h3>
-      <span class="new-price">46,000원</span>
+      <span class="new-price">70,000원</span>
       <br>
       <button onclick="addCart(this)">장바구니</button>
     </div>
@@ -601,7 +615,67 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="휴대편안 손잡이 스텐 텀블러 보온보냉 350ml 500ml 판촉물 사은품 인쇄" data-category="주방용품" data-trend-rank="11">
+    <div class="card" data-name="아코디언 접이식 휴대용 장바구니 시장가방" data-category="생활용품" data-trend-rank="11">
+      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13760198589" target="_blank" rel="noopener">
+        <img src="https://shop-phinf.pstatic.net/20260914_286/1789351540763egmrO_JPEG/55992195877920008_1438920608.jpg?type=f300_300" alt="아코디언 접이식 휴대용 장바구니 시장가방" loading="lazy">
+      </a>
+      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13760198589" target="_blank" rel="noopener" title="아코디언 접이식 휴대용 장바구니 시장가방">아코디언 접이식 휴대용 장바구니 시장가방</a></h3>
+      <span class="new-price">5,500원</span>
+      <br>
+      <button onclick="addCart(this)">장바구니</button>
+    </div>
+
+    <div class="card" data-name="무릎담요 망토담요" data-category="생활용품" data-trend-rank="12">
+      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13751235232" target="_blank" rel="noopener">
+        <img src="https://shop-phinf.pstatic.net/20260908_64/1788838525281kFjAn_JPEG/122971388424354746_1899224817.jpg?type=f300_300" alt="무릎담요 망토담요" loading="lazy">
+      </a>
+      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13751235232" target="_blank" rel="noopener" title="무릎담요 망토담요">무릎담요 망토담요</a></h3>
+      <span class="new-price">9,500원</span>
+      <br>
+      <button onclick="addCart(this)">장바구니</button>
+    </div>
+
+    <div class="card" data-name="부드러운 기모 안감 터치 니트 장갑" data-category="패션잡화" data-trend-rank="13">
+      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13750041872" target="_blank" rel="noopener">
+        <img src="https://shop-phinf.pstatic.net/20260907_69/1788765832072C91Ia_JPEG/15639606068244589_933081185.jpg?type=f300_300" alt="부드러운 기모 안감 터치 니트 장갑" loading="lazy">
+      </a>
+      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13750041872" target="_blank" rel="noopener" title="부드러운 기모 안감 터치 니트 장갑">부드러운 기모 안감 터치 니트 장갑</a></h3>
+      <span class="new-price">4,500원</span>
+      <br>
+      <button onclick="addCart(this)">장바구니</button>
+    </div>
+
+    <div class="card" data-name="악세사리보관함(여행용/휴대용)" data-category="패션잡화" data-trend-rank="14">
+      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13749935220" target="_blank" rel="noopener">
+        <img src="https://shop-phinf.pstatic.net/20260907_278/1788760646291PBUYj_PNG/8230046250411494_329950320.png?type=f300_300" alt="악세사리보관함(여행용/휴대용)" loading="lazy">
+      </a>
+      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13749935220" target="_blank" rel="noopener" title="악세사리보관함(여행용/휴대용)">악세사리보관함(여행용/휴대용)</a></h3>
+      <span class="new-price">2,500원</span>
+      <br>
+      <button onclick="addCart(this)">장바구니</button>
+    </div>
+
+    <div class="card" data-name="자석구름택배칼 미니커터칼 안전칼" data-category="문구장난감" data-trend-rank="15">
+      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13742329407" target="_blank" rel="noopener">
+        <img src="https://shop-phinf.pstatic.net/20260902_60/1788343038613hLKUi_JPEG/21125791609980468_1467244768.jpg?type=f300_300" alt="자석구름택배칼 미니커터칼 안전칼" loading="lazy">
+      </a>
+      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13742329407" target="_blank" rel="noopener" title="자석구름택배칼 미니커터칼 안전칼">자석구름택배칼 미니커터칼 안전칼</a></h3>
+      <span class="new-price">2,500원</span>
+      <br>
+      <button onclick="addCart(this)">장바구니</button>
+    </div>
+
+    <div class="card" data-name="휴대용 곰돌이 경보기" data-category="생활용품" data-trend-rank="16">
+      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13742167177" target="_blank" rel="noopener">
+        <img src="https://shop-phinf.pstatic.net/20260902_214/178833835533063JUw_JPEG/26470699870270889_598537593.jpg?type=f300_300" alt="휴대용 곰돌이 경보기" loading="lazy">
+      </a>
+      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13742167177" target="_blank" rel="noopener" title="휴대용 곰돌이 경보기">휴대용 곰돌이 경보기</a></h3>
+      <span class="new-price">4,500원</span>
+      <br>
+      <button onclick="addCart(this)">장바구니</button>
+    </div>
+
+    <div class="card" data-name="휴대편안 손잡이 스텐 텀블러 보온보냉 350ml 500ml 판촉물 사은품 인쇄" data-category="주방용품" data-trend-rank="17">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301662" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_52/1785811559352wEEGQ_JPEG/17286380124B7480DC55C85D6E32F408_img_760.jpg?type=f300_300" alt="휴대편안 손잡이 스텐 텀블러 보온보냉 350ml 500ml 판촉물 사은품 인쇄" loading="lazy">
       </a>
@@ -611,7 +685,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="초미니 키링안경 휴대용 보관 다리없는 접이식 돋보기 선물용" data-category="생활용품" data-trend-rank="12">
+    <div class="card" data-name="초미니 키링안경 휴대용 보관 다리없는 접이식 돋보기 선물용" data-category="생활용품" data-trend-rank="18">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301650" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_248/1785811559340gYYbn_JPEG/17268345871B33DFE9CA0B54E8743D5C_img_760.jpg?type=f300_300" alt="초미니 키링안경 휴대용 보관 다리없는 접이식 돋보기 선물용" loading="lazy">
       </a>
@@ -621,7 +695,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="싱크대물받이 실리콘패드 물튐방지 배수매트 수도꼭지물받이 물때방지 주방정리 4컬러" data-category="주방용품" data-trend-rank="13">
+    <div class="card" data-name="싱크대물받이 실리콘패드 물튐방지 배수매트 수도꼭지물받이 물때방지 주방정리 4컬러" data-category="주방용품" data-trend-rank="19">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301652" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_146/17858115595563TI26_JPEG/1745218290C36A58C970524157F2F141_img_760.jpg?type=f300_300" alt="싱크대물받이 실리콘패드 물튐방지 배수매트 수도꼭지물받이 물때방지 주방정리 4컬러" loading="lazy">
       </a>
@@ -631,7 +705,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="[지앤지] 가벼운 메쉬 필통 파우치" data-category="문구장난감" data-trend-rank="14">
+    <div class="card" data-name="[지앤지] 가벼운 메쉬 필통 파우치" data-category="문구장난감" data-trend-rank="20">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13728967663" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260821_46/1787278894007undQo_PNG/136156738938980416_1282394940.png?type=f300_300" alt="[지앤지] 가벼운 메쉬 필통 파우치" loading="lazy">
       </a>
@@ -641,7 +715,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="여성 투명 PVC 미니파우치" data-category="패션잡화" data-trend-rank="15">
+    <div class="card" data-name="여성 투명 PVC 미니파우치" data-category="패션잡화" data-trend-rank="21">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13717674555" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260811_99/1786448483297b4Fv9_JPEG/120581330441648384_479305370.jpg?type=f300_300" alt="여성 투명 PVC 미니파우치" loading="lazy">
       </a>
@@ -651,7 +725,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="투명 1000ml 대용량 눈금 계량컵 V자 입구 베이킹 요리 계량용기" data-category="주방용품" data-trend-rank="16">
+    <div class="card" data-name="투명 1000ml 대용량 눈금 계량컵 V자 입구 베이킹 요리 계량용기" data-category="주방용품" data-trend-rank="22">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301664" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_228/1785811559366gB1Dr_PNG/1774189208AD6E317BCDE0A3CAF94ACA_img_760.jpg?type=f300_300" alt="투명 1000ml 대용량 눈금 계량컵 V자 입구 베이킹 요리 계량용기" loading="lazy">
       </a>
@@ -661,7 +735,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="휴대용 리필형 배변봉투 15매 1롤 알약케이스 산책 외출 용품" data-category="생활용품" data-trend-rank="17">
+    <div class="card" data-name="휴대용 리필형 배변봉투 15매 1롤 알약케이스 산책 외출 용품" data-category="생활용품" data-trend-rank="23">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301659" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260805_285/178591306838642E3U_JPEG/6582492713703876_514538205.jpg?type=f300_300" alt="휴대용 리필형 배변봉투 15매 1롤 알약케이스 산책 외출 용품" loading="lazy">
       </a>
@@ -671,7 +745,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="디지털파우치 충전기수납케이스 USB케이블정리함 이어폰보관 휴대용 생활방수 멀티파우치" data-category="패션잡화" data-trend-rank="18">
+    <div class="card" data-name="디지털파우치 충전기수납케이스 USB케이블정리함 이어폰보관 휴대용 생활방수 멀티파우치" data-category="패션잡화" data-trend-rank="24">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301654" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_31/17858115602938g2pJ_JPEG/16130642711CDF9B342C5E6839458926_img_760.jpg?type=f300_300" alt="디지털파우치 충전기수납케이스 USB케이블정리함 이어폰보관 휴대용 생활방수 멀티파우치" loading="lazy">
       </a>
@@ -681,7 +755,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="휴대편한 일회용 우비 남녀공용 성인용 아동용 5색상 단추형 비옷" data-category="패션잡화" data-trend-rank="19">
+    <div class="card" data-name="휴대편한 일회용 우비 남녀공용 성인용 아동용 5색상 단추형 비옷" data-category="패션잡화" data-trend-rank="25">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301663" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_202/1785811560915L4Cfo_JPEG/1524126501973ABC41BB0717E8C0193D_img_760.jpg?type=f300_300" alt="휴대편한 일회용 우비 남녀공용 성인용 아동용 5색상 단추형 비옷" loading="lazy">
       </a>
@@ -691,7 +765,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="휴대편한 고리형 손잡이 3단 자동우산 UV 99% 차단 자동버튼" data-category="패션잡화" data-trend-rank="20">
+    <div class="card" data-name="휴대편한 고리형 손잡이 3단 자동우산 UV 99% 차단 자동버튼" data-category="패션잡화" data-trend-rank="26">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301658" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_74/1785811560179uqxGL_JPEG/17476928458C0AB2164C904C579C959C_img_760.jpg?type=f300_300" alt="휴대편한 고리형 손잡이 3단 자동우산 UV 99% 차단 자동버튼" loading="lazy">
       </a>
@@ -701,7 +775,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="멀티 뽀송 수세미 거치대 2color / 싱크대 수세미홀더 정리함" data-category="주방용품" data-trend-rank="21">
+    <div class="card" data-name="멀티 뽀송 수세미 거치대 2color / 싱크대 수세미홀더 정리함" data-category="주방용품" data-trend-rank="27">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13717642678" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260811_221/1786448493782R33Ke_JPEG/49429596562394797_331111475.jpg?type=f300_300" alt="멀티 뽀송 수세미 거치대 2color / 싱크대 수세미홀더 정리함" loading="lazy">
       </a>
@@ -711,7 +785,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="대나무 접시정리대 도마 식기거치대 접시보관대 주방정리 대사이즈" data-category="주방용품" data-trend-rank="22">
+    <div class="card" data-name="대나무 접시정리대 도마 식기거치대 접시보관대 주방정리 대사이즈" data-category="주방용품" data-trend-rank="28">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301648" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260706_23/1783324897998zrDsI_JPEG/117457711211929867_1384305647.jpg?type=f300_300" alt="대나무 접시정리대 도마 식기거치대 접시보관대 주방정리 대사이즈" loading="lazy">
       </a>
@@ -721,7 +795,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="쿨 아이스 냉감 반팔 남성 티셔츠" data-category="패션잡화" data-trend-rank="23">
+    <div class="card" data-name="쿨 아이스 냉감 반팔 남성 티셔츠" data-category="패션잡화" data-trend-rank="29">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13719930433" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260813_179/1786601436104xT4X7_JPEG/132453592927422753_361446577.jpg?type=f300_300" alt="쿨 아이스 냉감 반팔 남성 티셔츠" loading="lazy">
       </a>
@@ -731,19 +805,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="탈취제" data-category="생활용품" data-trend-rank="24">
-      <div class="badges">
-        <span class="badge">BEST</span>
-      </div>
-      <div class="thumb thumb-emoji">🌿</div>
-      <h3>탈취제</h3>
-      <span class="old-price">3,700원</span>
-      <span class="discount">10%</span><span class="new-price">3,300원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="축구공 회전 먼지 거름망 1P (3색상) 필터볼 세탁기 이물질거름망" data-category="생활용품" data-trend-rank="25">
+    <div class="card" data-name="축구공 회전 먼지 거름망 1P (3색상) 필터볼 세탁기 이물질거름망" data-category="생활용품" data-trend-rank="30">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301657" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_251/1785811559688sC83I_JPEG/1721891987C1DF24EFCDBB440B4A9859_img_760.jpg?type=f300_300" alt="축구공 회전 먼지 거름망 1P (3색상) 필터볼 세탁기 이물질거름망" loading="lazy">
       </a>
@@ -753,7 +815,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="니트 로프 손가방 미니백 시즌별 활용도 높은 데일리가방" data-category="패션잡화" data-trend-rank="26">
+    <div class="card" data-name="니트 로프 손가방 미니백 시즌별 활용도 높은 데일리가방" data-category="패션잡화" data-trend-rank="31">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301656" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_64/1785811560529OQlsC_JPEG/17743195420FFD30BA74E6B7105C405A_img_760.jpg?type=f300_300" alt="니트 로프 손가방 미니백 시즌별 활용도 높은 데일리가방" loading="lazy">
       </a>
@@ -763,28 +825,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="실리콘뒤집개" data-category="주방용품" data-trend-rank="27">
-      <div class="thumb thumb-emoji">🍳</div>
-      <h3>실리콘뒤집개</h3>
-      <span class="old-price">10,500원</span>
-      <span class="discount">9%</span><span class="new-price">9,500원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="식탁매트" data-category="주방용품" data-trend-rank="28">
-      <div class="badges">
-        <span class="badge">BEST</span>
-      </div>
-      <div class="thumb thumb-emoji">🍽️</div>
-      <h3>식탁매트</h3>
-      <span class="old-price">7,200원</span>
-      <span class="discount">25%</span><span class="new-price">5,400원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="남대문 히트템, 남대문 핫템. 구슬마사지기" data-category="생활용품" data-trend-rank="29">
+    <div class="card" data-name="남대문 히트템, 남대문 핫템. 구슬마사지기" data-category="생활용품" data-trend-rank="32">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13725208528" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260818_258/1787040537065Bqq6c_PNG/62808839100018217_1810646933.png?type=f300_300" alt="남대문 히트템, 남대문 핫템. 구슬마사지기" loading="lazy">
       </a>
@@ -794,17 +835,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="남대문 핫템, 샤워타월" data-category="욕실용품" data-trend-rank="30">
-      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13725202349" target="_blank" rel="noopener">
-        <img src="https://shop-phinf.pstatic.net/20260818_102/1787040081180KxQ2B_PNG/62808383255609753_278103699.png?type=f300_300" alt="남대문 핫템, 샤워타월" loading="lazy">
-      </a>
-      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13725202349" target="_blank" rel="noopener" title="남대문 핫템, 샤워타월">남대문 핫템, 샤워타월</a></h3>
-      <span class="new-price">3,500원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="남대문 히트템, 문어 괄사 마사지기" data-category="생활용품" data-trend-rank="31">
+    <div class="card" data-name="남대문 히트템, 문어 괄사 마사지기" data-category="생활용품" data-trend-rank="33">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13719930878" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260813_66/1786601458730cP5G6_JPEG/6024488870741543_538597878.jpg?type=f300_300" alt="남대문 히트템, 문어 괄사 마사지기" loading="lazy">
       </a>
@@ -814,7 +845,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="전자레인지용 찜기 중형 소형 세트" data-category="주방용품" data-trend-rank="32">
+    <div class="card" data-name="전자레인지용 찜기 중형 소형 세트" data-category="주방용품" data-trend-rank="34">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13719930756" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260813_15/1786601445981o25vA_JPEG/77787625785656651_396150776.jpg?type=f300_300" alt="전자레인지용 찜기 중형 소형 세트" loading="lazy">
       </a>
@@ -824,17 +855,17 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="가볍고 편한 국산 지압슬리퍼[230mm-245mm]" data-category="생활용품" data-trend-rank="33">
+    <div class="card" data-name="가볍고 편한 국산 지압슬리퍼" data-category="생활용품" data-trend-rank="35">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13717674333" target="_blank" rel="noopener">
-        <img src="https://shop-phinf.pstatic.net/20260811_239/17864507681605ANYT_JPEG/108033592125176650_602564261.jpg?type=f300_300" alt="가볍고 편한 국산 지압슬리퍼[230mm-245mm]" loading="lazy">
+        <img src="https://shop-phinf.pstatic.net/20260811_239/17864507681605ANYT_JPEG/108033592125176650_602564261.jpg?type=f300_300" alt="가볍고 편한 국산 지압슬리퍼" loading="lazy">
       </a>
-      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13717674333" target="_blank" rel="noopener" title="가볍고 편한 국산 지압슬리퍼[230mm-245mm]">가볍고 편한 국산 지압슬리퍼[230mm-245mm]</a></h3>
+      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13717674333" target="_blank" rel="noopener" title="가볍고 편한 국산 지압슬리퍼">가볍고 편한 국산 지압슬리퍼</a></h3>
       <span class="new-price">10,230원</span>
       <br>
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="비누 크런치 슬랑이 말랑이 스퀴시 크랑이 스트레스해소 촉감놀이 슬라임" data-category="문구장난감" data-trend-rank="34">
+    <div class="card" data-name="비누 크런치 슬랑이 말랑이 스퀴시 크랑이 스트레스해소 촉감놀이 슬라임" data-category="문구장난감" data-trend-rank="36">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13702536317" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260828_280/1787883008995CWadd_JPEG/122015844133007689_1154963298.jpg?type=f300_300" alt="비누 크런치 슬랑이 말랑이 스퀴시 크랑이 스트레스해소 촉감놀이 슬라임" loading="lazy">
       </a>
@@ -844,7 +875,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="큐브 치즈 크런치 슬랑이 말랑이 선물용 추천 스트레스 완화" data-category="문구장난감" data-trend-rank="35">
+    <div class="card" data-name="큐브 치즈 크런치 슬랑이 말랑이 선물용 추천 스트레스 완화" data-category="문구장난감" data-trend-rank="37">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13702516603" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260806_260/17859833116209Ll1w_JPEG/107566135500312877_1638355201.jpg?type=f300_300" alt="큐브 치즈 크런치 슬랑이 말랑이 선물용 추천 스트레스 완화" loading="lazy">
       </a>
@@ -854,7 +885,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="러닝양말 발바닥두꺼운쿠션양말 발바닥통증" data-category="패션잡화" data-trend-rank="36">
+    <div class="card" data-name="러닝양말 발바닥두꺼운쿠션양말 발바닥통증" data-category="패션잡화" data-trend-rank="38">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301661" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_67/1785811561359qtdjF_JPEG/175368433405A9EEC2537881B1C0B884_img_760.jpg?type=f300_300" alt="러닝양말 발바닥두꺼운쿠션양말 발바닥통증" loading="lazy">
       </a>
@@ -864,7 +895,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="전자레인지덮개 푸드커버28cm" data-category="주방용품" data-trend-rank="37">
+    <div class="card" data-name="전자레인지덮개 푸드커버28cm" data-category="주방용품" data-trend-rank="39">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301653" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_2/1785811559478VAgxn_JPEG/1616487569D576684612269A12EF5A26_img_760.jpg?type=f300_300" alt="전자레인지덮개 푸드커버28cm" loading="lazy">
       </a>
@@ -874,7 +905,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="세면대 수전연장 각도조절 워터탭 절수노즐 360도회전 간편설치 내경22mm 전용" data-category="욕실용품" data-trend-rank="38">
+    <div class="card" data-name="세면대 수전연장 각도조절 워터탭 절수노즐 360도회전 간편설치 내경22mm 전용" data-category="욕실용품" data-trend-rank="40">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301651" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_257/1785811560704deoQv_JPEG/1747898005CD2D253B8E244945F63BA7_img_760.jpg?type=f300_300" alt="세면대 수전연장 각도조절 워터탭 절수노즐 360도회전 간편설치 내경22mm 전용" loading="lazy">
       </a>
@@ -884,7 +915,7 @@
       <button onclick="addCart(this)">장바구니</button>
     </div>
 
-    <div class="card" data-name="세라믹 라면기 손잡이 도자기 면기 국그릇 패킹뚜껑 날짜표시 전자레인지용기 2컬러" data-category="주방용품" data-trend-rank="39">
+    <div class="card" data-name="세라믹 라면기 손잡이 도자기 면기 국그릇 패킹뚜껑 날짜표시 전자레인지용기 2컬러" data-category="주방용품" data-trend-rank="41">
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301649" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260710_277/1783673795979CqFC6_JPEG/22017337472712651_1789113476.jpg?type=f300_300" alt="세라믹 라면기 손잡이 도자기 면기 국그릇 패킹뚜껑 날짜표시 전자레인지용기 2컬러" loading="lazy">
       </a>
