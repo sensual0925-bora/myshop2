@@ -499,6 +499,22 @@
       font-size: 20px;
       color: var(--text);
     }
+    .cart-login-note {
+      margin: 0 0 14px 0;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background-color: var(--bg);
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--sub);
+    }
+    .cart-login-note[hidden] {
+      display: none;
+    }
+    .cart-login-note a {
+      color: var(--accent-dark);
+      font-weight: 600;
+    }
     .cart-note {
       margin: 12px 0 0 0;
       text-align: center;
@@ -1226,6 +1242,7 @@
     </div>
     <ul class="cart-list" id="cartList"></ul>
     <div class="cart-foot">
+      <p class="cart-login-note" id="cartLoginNote">로그인하면 장바구니가 저장돼서 다른 기기에서도 볼 수 있어요. <a href="#" onclick="openLogin('login'); return false;">로그인</a></p>
       <div class="cart-total">총 상품금액 <strong id="cartTotal">0원</strong></div>
       <a class="btn-dark" href="https://smartstore.naver.com/sosolittlestore" target="_blank" rel="noopener">스마트스토어에서 구매하기</a>
       <p class="cart-note">결제는 네이버 스마트스토어에서 진행됩니다. 상품명을 누르면 해당 상품으로 이동해요.</p>
@@ -1248,23 +1265,149 @@
       }, 2200);
     }
 
-    // ===== 장바구니 (이 브라우저에만 저장) =====
+    // ===== 장바구니 =====
+    // 비회원: 이 브라우저에만 저장 (localStorage)
+    // 회원:   Supabase cart_items 표에 저장 → 새로고침 · 다른 기기에서도 같은 장바구니
     var CART_KEY = 'sosoCart';
-    var cart = [];
-    try {
-      cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
-    } catch (e) {
-      cart = [];
+    var cart = [];   // [{ no: 상품번호, name, price, img, url, qty }]
+
+    function productNoFromUrl(url) {
+      var m = /\/products\/(\d+)/.exec(url || '');
+      return m ? m[1] : '';
     }
 
-    function saveCart() {
+    function loadLocalCart() {
+      var list = [];
       try {
-        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        list = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+      } catch (e) {
+        list = [];
+      }
+      // 예전 버전에서 담은 상품은 상품번호가 없어서 주소에서 꺼냄
+      return list.map(function (it) {
+        it.no = it.no || productNoFromUrl(it.url);
+        return it;
+      }).filter(function (it) { return it.no; });
+    }
+
+    function saveLocalCart(list) {
+      try {
+        localStorage.setItem(CART_KEY, JSON.stringify(list));
       } catch (e) {}
+    }
+
+    cart = loadLocalCart();
+
+    function isMember() {
+      return !!(sb && currentUser);
+    }
+
+    // 비회원 장바구니만 브라우저에 저장 (회원은 담을 때마다 Supabase에 저장)
+    function saveCart() {
+      if (!isMember()) {
+        saveLocalCart(cart);
+      }
     }
 
     function won(n) {
       return n.toLocaleString('ko-KR') + '원';
+    }
+
+    // --- 회원 장바구니 (Supabase) ---
+    // 판매 중인 상품만 불러옴 (판매 종료된 상품은 products 보안 규칙에 걸려 빠짐)
+    function fetchServerCart() {
+      return sb.from('cart_items')
+        .select('product_no, qty, products(name, price, image_url, product_url)')
+        .order('created_at', { ascending: true })
+        .then(function (res) {
+          if (res.error) { throw res.error; }
+          return res.data.filter(function (r) { return r.products; }).map(function (r) {
+            return {
+              no: r.product_no,
+              qty: r.qty,
+              name: r.products.name,
+              price: r.products.price,
+              img: r.products.image_url,
+              url: r.products.product_url
+            };
+          });
+        });
+    }
+
+    // 상품 한 개의 수량 저장 (0이면 삭제)
+    function saveServerItem(no, qty) {
+      var job = (qty < 1)
+        ? sb.from('cart_items').delete().eq('product_no', no)
+        : sb.from('cart_items').upsert(
+            { user_id: currentUser.id, product_no: no, qty: qty },
+            { onConflict: 'user_id,product_no' }
+          );
+      return job.then(function (res) {
+        if (res.error) { throw res.error; }
+      });
+    }
+
+    // 저장 요청은 담은 순서대로 하나씩 처리 (빠르게 여러 번 눌러도 순서가 꼬이지 않게)
+    var serverQueue = Promise.resolve();
+    function queueServerSave(no, qty) {
+      if (!isMember()) { return; }
+      serverQueue = serverQueue
+        .then(function () { return saveServerItem(no, qty); })
+        .catch(function () {
+          showToast('장바구니를 저장하지 못했어요. 다시 시도해 주세요.');
+          return refreshMemberCart();
+        });
+    }
+
+    function refreshMemberCart() {
+      if (!isMember()) { return Promise.resolve(); }
+      return fetchServerCart().then(function (items) {
+        cart = items;
+        renderCart();
+      }, function () {
+        showToast('장바구니를 불러오지 못했어요.');
+      });
+    }
+
+    // 로그인했을 때: 비회원일 때 담은 상품을 회원 장바구니에 합친 뒤 불러오기
+    var cartSyncing = null;
+    function syncCartOnLogin() {
+      if (!isMember()) { return Promise.resolve(); }
+      if (cartSyncing) { return cartSyncing; }
+      var local = loadLocalCart();
+      cartSyncing = fetchServerCart().then(function (server) {
+        if (local.length === 0) { return server; }
+        var rows = local.map(function (it) {
+          var same = server.find(function (s) { return s.no === it.no; });
+          return {
+            user_id: currentUser.id,
+            product_no: it.no,
+            qty: Math.min(99, it.qty + (same ? same.qty : 0))
+          };
+        });
+        return sb.from('cart_items')
+          .upsert(rows, { onConflict: 'user_id,product_no' })
+          .then(function (res) {
+            if (res.error) { throw res.error; }
+            saveLocalCart([]);
+            showToast('비회원일 때 담은 상품을 회원 장바구니에 합쳤어요.');
+            return fetchServerCart();
+          });
+      }).then(function (items) {
+        cart = items;
+        renderCart();
+      }).catch(function () {
+        showToast('장바구니를 불러오지 못했어요.');
+      }).then(function () {
+        cartSyncing = null;
+      });
+      return cartSyncing;
+    }
+
+    // 로그아웃: 회원 장바구니는 Supabase에 남겨 두고 화면에서만 비움
+    function clearCartOnLogout() {
+      cart = [];
+      renderCart();
     }
 
     // 상품 카드의 − / + 버튼: 담을 수량 고르기 (1 ~ 99)
@@ -1277,42 +1420,50 @@
     // 상품 카드의 장바구니 버튼: 고른 수량만큼 담기
     function addCart(btn) {
       var card = btn.closest('.card');
-      var link = card.querySelector('.thumb');
-      var img = card.querySelector('.thumb img');
       var num = card.querySelector('.buy .qty span');
       var qty = parseInt(num.textContent, 10) || 1;
-      var url = link.href;
-      var item = cart.find(function (it) { return it.url === url; });
+      var no = card.dataset.productNo;
+      var item = cart.find(function (it) { return it.no === no; });
       if (item) {
-        item.qty += qty;
+        item.qty = Math.min(99, item.qty + qty);
       } else {
-        cart.push({
-          url: url,
+        var img = card.querySelector('.thumb img');
+        item = {
+          no: no,
           name: card.dataset.name,
-          price: parseInt(card.querySelector('.new-price').textContent.replace(/[^0-9]/g, ''), 10) || 0,
+          price: parseInt(card.dataset.price, 10) || 0,
           img: img ? img.src : '',
-          qty: qty
-        });
+          url: card.querySelector('.thumb').href,
+          qty: Math.min(99, qty)
+        };
+        cart.push(item);
       }
       num.textContent = 1;
       saveCart();
       renderCart();
       showToast('장바구니에 ' + qty + '개 담았어요.');
+      queueServerSave(no, item.qty);
     }
 
     function changeQty(index, diff) {
-      cart[index].qty += diff;
-      if (cart[index].qty < 1) {
+      var it = cart[index];
+      var q = Math.min(99, it.qty + diff);
+      if (q < 1) {
         cart.splice(index, 1);
+      } else {
+        it.qty = q;
       }
       saveCart();
       renderCart();
+      queueServerSave(it.no, q);
     }
 
     function removeItem(index) {
+      var it = cart[index];
       cart.splice(index, 1);
       saveCart();
       renderCart();
+      queueServerSave(it.no, 0);
     }
 
     // 장바구니 목록 · 개수 · 총액 다시 그리기
@@ -1381,6 +1532,8 @@
       document.getElementById('cartCount').textContent = count;
       document.getElementById('floatCount').textContent = count;
       document.getElementById('cartTotal').textContent = won(total);
+      // 비회원에게만 '로그인하면 저장돼요' 안내
+      document.getElementById('cartLoginNote').hidden = isMember();
     }
 
     // ===== 로그인 창 · 장바구니 열고 닫기 =====
@@ -1641,6 +1794,13 @@
       sb.auth.onAuthStateChange(function (event, session) {
         currentUser = session ? session.user : null;
         updateAccountBtn();
+        // 장바구니: 로그인하면 회원 장바구니로, 로그아웃하면 비우기
+        // (이 안에서 Supabase를 바로 부르면 멈출 수 있어서 setTimeout으로 한 박자 뒤에 실행)
+        if (currentUser && (event === 'INITIAL_SESSION' || event === 'SIGNED_IN')) {
+          setTimeout(syncCartOnLogin, 0);
+        } else if (event === 'SIGNED_OUT') {
+          setTimeout(clearCartOnLogout, 0);
+        }
         // 비밀번호 재설정 메일의 링크로 들어온 경우: 새 비밀번호 입력 창 열기
         if (event === 'PASSWORD_RECOVERY') {
           setTimeout(function () { openLogin('newpw'); }, 0);
@@ -1671,8 +1831,10 @@
     function makeCard(p) {
       var card = document.createElement('div');
       card.className = 'card';
+      card.dataset.productNo = p.product_no;
       card.dataset.name = p.name;
       card.dataset.category = p.category;
+      card.dataset.price = p.price;
 
       if (p.is_trend) {
         var badges = document.createElement('div');
@@ -1782,11 +1944,14 @@
           // 지금 선택된 카테고리 다시 적용
           filterCategory(document.querySelector('nav a.cat.active'));
 
-          // 판매가 끝난(목록에서 빠진) 상품은 장바구니에서도 정리
-          var urls = res.data.map(function (p) { return safeUrl(p.product_url); });
-          cart = cart.filter(function (it) { return urls.indexOf(it.url) !== -1; });
-          saveCart();
-          renderCart();
+          // 비회원 장바구니: 판매가 끝난(목록에서 빠진) 상품 정리
+          // (회원 장바구니는 불러올 때 판매 중인 상품만 가져옴)
+          if (!isMember()) {
+            var nos = res.data.map(function (p) { return p.product_no; });
+            cart = cart.filter(function (it) { return nos.indexOf(it.no) !== -1; });
+            saveCart();
+            renderCart();
+          }
         }, function () {
           showProductsMessage('상품을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.', true);
         });
