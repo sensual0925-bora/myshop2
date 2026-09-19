@@ -282,6 +282,20 @@
     .auth-msg.ok {
       color: #4F7A52;
     }
+    /* 로그인 창 맨 위 안내 (예: 장바구니 담기 → '로그인이 필요합니다.') */
+    .auth-notice {
+      margin: -12px 0 20px 0;
+      padding: 12px 16px;
+      border-radius: 14px;
+      background-color: var(--sand);
+      color: var(--accent-dark);
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .auth-notice[hidden] {
+      display: none;
+    }
     .login-modal input[hidden] {
       display: none;
     }
@@ -1212,13 +1226,14 @@
   </footer>
 
   <!-- 어두운 배경 (누르면 열린 창 닫힘) -->
-  <div class="overlay" id="overlay" onclick="closeAll()"></div>
+  <div class="overlay" id="overlay" onclick="dismissAll()"></div>
 
   <!-- 로그인 창 -->
   <div class="login-modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-    <button type="button" class="close-btn" onclick="closeAll()" aria-label="닫기">×</button>
+    <button type="button" class="close-btn" onclick="dismissAll()" aria-label="닫기">×</button>
     <p class="eng" id="loginEng">Member Login</p>
     <h2 id="loginTitle">로그인</h2>
+    <p class="auth-notice" id="authNotice" role="alert" hidden></p>
     <!-- 창 모드: login(로그인) · signup(회원가입) · reset(비밀번호 찾기) · newpw(새 비밀번호) -->
     <form id="authForm" onsubmit="return submitAuth(this)" novalidate>
       <input type="text" name="fullname" placeholder="이름" autocomplete="name" maxlength="20">
@@ -1238,11 +1253,11 @@
     <div class="cart-head">
       <p class="eng">Shopping Bag</p>
       <h2 id="cartTitle">장바구니</h2>
-      <button type="button" class="close-btn" onclick="closeAll()" aria-label="닫기">×</button>
+      <button type="button" class="close-btn" onclick="dismissAll()" aria-label="닫기">×</button>
     </div>
     <ul class="cart-list" id="cartList"></ul>
     <div class="cart-foot">
-      <p class="cart-login-note" id="cartLoginNote">로그인하면 장바구니가 저장돼서 다른 기기에서도 볼 수 있어요. <a href="#" onclick="openLogin('login'); return false;">로그인</a></p>
+      <p class="cart-login-note" id="cartLoginNote">장바구니는 로그인 후 이용할 수 있어요. 로그인하면 다른 기기에서도 같은 장바구니를 볼 수 있어요. <a href="#" onclick="openLogin('login'); return false;">로그인</a></p>
       <div class="cart-total">총 상품금액 <strong id="cartTotal">0원</strong></div>
       <a class="btn-dark" href="https://smartstore.naver.com/sosolittlestore" target="_blank" rel="noopener">스마트스토어에서 구매하기</a>
       <p class="cart-note">결제는 네이버 스마트스토어에서 진행됩니다. 상품명을 누르면 해당 상품으로 이동해요.</p>
@@ -1396,6 +1411,7 @@
       }).then(function (items) {
         cart = items;
         renderCart();
+        runPendingAdd();
       }).catch(function () {
         showToast('장바구니를 불러오지 못했어요.');
       }).then(function () {
@@ -1417,11 +1433,39 @@
       num.textContent = Math.min(99, Math.max(1, n));
     }
 
-    // 상품 카드의 장바구니 버튼: 고른 수량만큼 담기
+    // 로그인 전에 누른 '담기' (로그인하면 이어서 담음, 로그인 창을 닫으면 취소)
+    var pendingAdd = null;
+
+    // 상품 카드의 장바구니 버튼: 로그인 확인 후 고른 수량만큼 담기
     function addCart(btn) {
       var card = btn.closest('.card');
       var num = card.querySelector('.buy .qty span');
       var qty = parseInt(num.textContent, 10) || 1;
+      if (!isMember()) {
+        openLogin('login');
+        pendingAdd = { no: card.dataset.productNo, qty: qty };
+        var notice = document.getElementById('authNotice');
+        notice.textContent = '로그인이 필요합니다.';
+        notice.hidden = false;
+        return;
+      }
+      num.textContent = 1;
+      addToCart(card, qty);
+    }
+
+    // 로그인 후: 로그인 전에 누른 상품 이어서 담기
+    function runPendingAdd() {
+      if (!pendingAdd || !isMember()) { return; }
+      var p = pendingAdd;
+      pendingAdd = null;
+      var card = document.querySelector('#products .card[data-product-no="' + p.no + '"]');
+      if (card) {
+        card.querySelector('.buy .qty span').textContent = 1;
+        addToCart(card, p.qty);
+      }
+    }
+
+    function addToCart(card, qty) {
       var no = card.dataset.productNo;
       var item = cart.find(function (it) { return it.no === no; });
       if (item) {
@@ -1438,7 +1482,6 @@
         };
         cart.push(item);
       }
-      num.textContent = 1;
       saveCart();
       renderCart();
       showToast('장바구니에 ' + qty + '개 담았어요.');
@@ -1557,6 +1600,12 @@
       document.body.style.overflow = 'hidden';
     }
 
+    // 손님이 직접 닫을 때 (×, 바깥 누르기, ESC): 로그인 전에 누른 '담기'도 취소
+    function dismissAll() {
+      pendingAdd = null;
+      closeAll();
+    }
+
     function closeAll() {
       document.getElementById('loginModal').classList.remove('show');
       document.getElementById('cartDrawer').classList.remove('show');
@@ -1565,7 +1614,7 @@
     }
 
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { closeAll(); }
+      if (e.key === 'Escape') { dismissAll(); }
     });
 
     // ===== 회원 로그인 · 가입 (Supabase) =====
@@ -1593,6 +1642,7 @@
       authMode = mode;
       form.reset();
       setAuthMsg('');
+      document.getElementById('authNotice').hidden = true;
       document.getElementById('loginEng').textContent = m.eng;
       document.getElementById('loginTitle').textContent = m.title;
       document.getElementById('authSubmit').textContent = m.submit;
