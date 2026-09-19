@@ -12,6 +12,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Noto+Serif+KR:wght@400;500;600&display=swap">
 
+  <!-- Supabase (회원 로그인 · 가입) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.js"></script>
+
   <style>
     /* ===== 색상 (따뜻하고 모던한 무드: 크림 · 샌드 · 카멜 · 웜차콜) ===== */
     :root {
@@ -255,20 +258,23 @@
     .login-modal input:focus {
       border-color: var(--accent);
     }
-    .login-keep {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin: 4px 0 18px 2px;
+    /* 로그인 창 안내 · 오류 메시지 */
+    .auth-msg {
+      min-height: 20px;
+      margin: 2px 2px 12px 2px;
       font-size: 13px;
-      color: var(--sub);
-      cursor: pointer;
+      line-height: 1.5;
+      color: var(--sale);
     }
-    .login-keep input {
-      display: inline-block;
-      width: auto;
-      margin: 0;
-      accent-color: var(--accent);
+    .auth-msg.ok {
+      color: #4F7A52;
+    }
+    .login-modal input[hidden] {
+      display: none;
+    }
+    .btn-dark:disabled {
+      opacity: 0.55;
+      cursor: wait;
     }
     .btn-dark,
     .btn-light {
@@ -1023,9 +1029,9 @@
   <header>
     <!-- 오른쪽 위: 로그인 · 장바구니 -->
     <div class="util">
-      <button type="button" class="util-btn" onclick="openLogin()">
+      <button type="button" class="util-btn" id="accountBtn" onclick="onAccountClick()">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
-        <span>로그인</span>
+        <span id="accountLabel">로그인</span>
       </button>
       <button type="button" class="util-btn" onclick="openCart()">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
@@ -1578,19 +1584,17 @@
   <!-- 로그인 창 -->
   <div class="login-modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
     <button type="button" class="close-btn" onclick="closeAll()" aria-label="닫기">×</button>
-    <p class="eng">Member Login</p>
+    <p class="eng" id="loginEng">Member Login</p>
     <h2 id="loginTitle">로그인</h2>
-    <form onsubmit="return submitLogin(this)">
-      <input type="text" name="id" placeholder="아이디" autocomplete="username" required>
-      <input type="password" name="pw" placeholder="비밀번호" autocomplete="current-password" required>
-      <label class="login-keep"><input type="checkbox"> 로그인 상태 유지</label>
-      <button type="submit" class="btn-dark">로그인</button>
+    <!-- 창 모드: login(로그인) · signup(회원가입) · reset(비밀번호 찾기) · newpw(새 비밀번호) -->
+    <form id="authForm" onsubmit="return submitAuth(this)" novalidate>
+      <input type="email" name="email" placeholder="이메일" autocomplete="email" required>
+      <input type="password" name="pw" placeholder="비밀번호" autocomplete="current-password" minlength="6" required>
+      <input type="password" name="pw2" placeholder="비밀번호 확인" autocomplete="new-password" minlength="6">
+      <p class="auth-msg" id="authMsg" role="alert"></p>
+      <button type="submit" class="btn-dark" id="authSubmit">로그인</button>
     </form>
-    <div class="login-links">
-      <a href="#" onclick="showToast('회원가입은 준비 중이에요.'); return false;">회원가입</a>
-      <a href="#" onclick="showToast('아이디 찾기는 준비 중이에요.'); return false;">아이디 찾기</a>
-      <a href="#" onclick="showToast('비밀번호 찾기는 준비 중이에요.'); return false;">비밀번호 찾기</a>
-    </div>
+    <div class="login-links" id="authLinks"></div>
     <div class="login-or">또는</div>
     <a class="btn-light" href="https://smartstore.naver.com/sosolittlestore" target="_blank" rel="noopener">스마트스토어에서 주문하기</a>
   </div>
@@ -1762,13 +1766,15 @@
     }
 
     // ===== 로그인 창 · 장바구니 열고 닫기 =====
-    function openLogin() {
+    function openLogin(mode) {
       closeAll();
+      setAuthMode(mode || 'login');
       document.getElementById('loginModal').classList.add('show');
       document.getElementById('overlay').classList.add('show');
       document.body.style.overflow = 'hidden';
       setTimeout(function () {
-        document.querySelector('#loginModal input[name="id"]').focus();
+        var first = document.querySelector('#authForm input:not([hidden])');
+        if (first) { first.focus(); }
       }, 50);
     }
 
@@ -1791,12 +1797,181 @@
       if (e.key === 'Escape') { closeAll(); }
     });
 
-    // 로그인: 아직 회원 서버가 없어서 입력 내용은 어디에도 보내거나 저장하지 않음
-    function submitLogin(form) {
+    // ===== 회원 로그인 · 가입 (Supabase) =====
+    // publishable 키는 웹페이지에 넣어 쓰도록 만들어진 공개용 키 (secret 키는 절대 넣지 말 것)
+    var SUPABASE_URL = 'https://vxmnlwgqsmnmqilncahh.supabase.co';
+    var SUPABASE_KEY = 'sb_publishable_H42kJgrEM5LkmOUvFJoPsg_XleuXkr-';
+    var sb = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+    var currentUser = null;
+    var authMode = 'login';
+
+    // 가입 확인 · 비밀번호 재설정 메일의 링크를 누르면 돌아올 주소 (지금 이 페이지)
+    var PAGE_URL = location.origin + location.pathname;
+
+    // 창 모드별 문구와 보이는 칸
+    var AUTH_MODES = {
+      login:  { eng: 'Member Login',  title: '로그인',      submit: '로그인',              email: true,  pw: true,  pw2: false },
+      signup: { eng: 'Join Us',       title: '회원가입',    submit: '가입하기',            email: true,  pw: true,  pw2: true  },
+      reset:  { eng: 'Find Password', title: '비밀번호 찾기', submit: '재설정 메일 보내기', email: true,  pw: false, pw2: false },
+      newpw:  { eng: 'New Password',  title: '새 비밀번호',  submit: '비밀번호 변경',       email: false, pw: true,  pw2: true  }
+    };
+
+    function setAuthMode(mode) {
+      var m = AUTH_MODES[mode];
+      var form = document.getElementById('authForm');
+      authMode = mode;
       form.reset();
-      closeAll();
-      showToast('회원 로그인은 준비 중이에요. 주문은 스마트스토어에서 하실 수 있어요.');
+      setAuthMsg('');
+      document.getElementById('loginEng').textContent = m.eng;
+      document.getElementById('loginTitle').textContent = m.title;
+      document.getElementById('authSubmit').textContent = m.submit;
+      form.email.hidden = !m.email;
+      form.pw.hidden = !m.pw;
+      form.pw2.hidden = !m.pw2;
+      form.pw.placeholder = (mode === 'newpw') ? '새 비밀번호 (6자 이상)' : (mode === 'signup' ? '비밀번호 (6자 이상)' : '비밀번호');
+      form.pw.autocomplete = (mode === 'login') ? 'current-password' : 'new-password';
+
+      // 창 아래 링크
+      var links = document.getElementById('authLinks');
+      links.innerHTML = '';
+      function addLink(text, target) {
+        var a = document.createElement('a');
+        a.href = '#';
+        a.textContent = text;
+        a.onclick = function () { setAuthMode(target); return false; };
+        links.appendChild(a);
+      }
+      if (mode === 'login') {
+        addLink('회원가입', 'signup');
+        addLink('비밀번호 찾기', 'reset');
+      } else if (mode !== 'newpw') {
+        addLink('로그인으로 돌아가기', 'login');
+      }
+    }
+
+    function setAuthMsg(text, ok) {
+      var msg = document.getElementById('authMsg');
+      msg.textContent = text;
+      msg.classList.toggle('ok', !!ok);
+    }
+
+    // Supabase 오류를 한글 안내로
+    function authErrorText(err) {
+      var map = {
+        invalid_credentials: '이메일 또는 비밀번호가 맞지 않아요.',
+        email_not_confirmed: '메일 인증이 아직 안 됐어요. 가입할 때 받은 메일의 링크를 눌러 주세요.',
+        user_already_exists: '이미 가입된 이메일이에요. 로그인해 주세요.',
+        email_exists: '이미 가입된 이메일이에요. 로그인해 주세요.',
+        weak_password: '비밀번호가 너무 쉬워요. 더 길고 복잡하게 만들어 주세요.',
+        same_password: '지금 쓰는 비밀번호와 달라야 해요.',
+        email_address_invalid: '이메일 주소를 확인해 주세요.',
+        signup_disabled: '지금은 회원가입을 받지 않고 있어요.',
+        over_email_send_rate_limit: '메일을 너무 자주 보냈어요. 잠시 후 다시 시도해 주세요.',
+        over_request_rate_limit: '요청이 너무 많아요. 잠시 후 다시 시도해 주세요.'
+      };
+      return map[err.code] || ('문제가 생겼어요: ' + err.message);
+    }
+
+    function submitAuth(form) {
+      if (!sb) {
+        setAuthMsg('로그인 서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.');
+        return false;
+      }
+      var email = form.email.value.trim();
+      var pw = form.pw.value;
+      var pw2 = form.pw2.value;
+
+      if (authMode !== 'newpw' && !/^\S+@\S+\.\S+$/.test(email)) {
+        setAuthMsg('이메일 주소를 확인해 주세요.');
+        return false;
+      }
+      if (authMode !== 'reset' && pw.length < 6) {
+        setAuthMsg('비밀번호는 6자 이상 입력해 주세요.');
+        return false;
+      }
+      if ((authMode === 'signup' || authMode === 'newpw') && pw !== pw2) {
+        setAuthMsg('비밀번호가 서로 달라요.');
+        return false;
+      }
+
+      var mode = authMode;
+      var btn = document.getElementById('authSubmit');
+      var job;
+      if (mode === 'login') {
+        job = sb.auth.signInWithPassword({ email: email, password: pw });
+      } else if (mode === 'signup') {
+        job = sb.auth.signUp({ email: email, password: pw, options: { emailRedirectTo: PAGE_URL } });
+      } else if (mode === 'reset') {
+        job = sb.auth.resetPasswordForEmail(email, { redirectTo: PAGE_URL });
+      } else {
+        job = sb.auth.updateUser({ password: pw });
+      }
+
+      btn.disabled = true;
+      setAuthMsg('');
+      job.then(function (res) {
+        btn.disabled = false;
+        if (res.error) {
+          setAuthMsg(authErrorText(res.error));
+          return;
+        }
+        if (mode === 'login') {
+          closeAll();
+          showToast(email.split('@')[0] + '님, 반가워요.');
+        } else if (mode === 'signup') {
+          var user = res.data.user;
+          if (user && user.identities && user.identities.length === 0) {
+            setAuthMsg('이미 가입된 이메일이에요. 로그인해 주세요.');
+          } else if (res.data.session) {
+            closeAll();
+            showToast('가입을 환영해요!');
+          } else {
+            form.reset();
+            setAuthMsg('가입 확인 메일을 보냈어요. 메일의 링크를 누르면 가입이 끝나요.', true);
+          }
+        } else if (mode === 'reset') {
+          form.reset();
+          setAuthMsg('비밀번호 재설정 메일을 보냈어요. 메일의 링크를 눌러 주세요.', true);
+        } else {
+          closeAll();
+          showToast('비밀번호를 바꿨어요.');
+        }
+      }).catch(function () {
+        btn.disabled = false;
+        setAuthMsg('연결이 원활하지 않아요. 잠시 후 다시 시도해 주세요.');
+      });
       return false;
+    }
+
+    // 오른쪽 위 계정 버튼: 로그인 전 → 로그인 창 / 로그인 후 → 로그아웃
+    function onAccountClick() {
+      if (!currentUser) {
+        openLogin('login');
+        return;
+      }
+      if (confirm(currentUser.email + '\n로그아웃할까요?')) {
+        sb.auth.signOut().then(function () {
+          showToast('로그아웃했어요.');
+        });
+      }
+    }
+
+    function updateAccountBtn() {
+      var btn = document.getElementById('accountBtn');
+      document.getElementById('accountLabel').textContent = currentUser ? '로그아웃' : '로그인';
+      btn.title = currentUser ? currentUser.email + ' 로그인 중' : '';
+    }
+
+    // 로그인 상태가 바뀔 때마다 버튼 갱신 (새로고침해도 로그인 유지됨)
+    if (sb) {
+      sb.auth.onAuthStateChange(function (event, session) {
+        currentUser = session ? session.user : null;
+        updateAccountBtn();
+        // 비밀번호 재설정 메일의 링크로 들어온 경우: 새 비밀번호 입력 창 열기
+        if (event === 'PASSWORD_RECOVERY') {
+          setTimeout(function () { openLogin('newpw'); }, 0);
+        }
+      });
     }
 
     // 카테고리 클릭 -> 그 카테고리 상품만 보이기 ('전체'는 전부)
