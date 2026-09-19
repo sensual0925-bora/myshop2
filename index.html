@@ -5,188 +5,258 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>소소상점 - 소소한 하루를 채우는 생활용품</title>
 
-  <!-- 폰트: Pretendard(본문) + Paperlogy(제목) -->
+  <!-- 폰트: Pretendard(본문) + Noto Serif KR(로고·제목, 명조) + Montserrat(영문 라벨) -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/Paperlogy.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Noto+Serif+KR:wght@400;500;600&display=swap">
 
   <style>
+    /* ===== 색상 (따뜻하고 모던한 무드: 크림 · 샌드 · 카멜 · 웜차콜) ===== */
+    :root {
+      --bg: #FBF8F3;       /* 크림 바탕 */
+      --sand: #F2EAE0;     /* 배너 · 안내 박스 */
+      --card: #FFFFFF;
+      --line: #E9E0D5;
+      --text: #2E2622;     /* 웜차콜 */
+      --sub: #756A62;
+      --light: #AFA398;
+      --accent: #B07A52;   /* 카멜 */
+      --accent-dark: #8E5E3C;
+      --terracotta: #B8664A; /* 추석 배지 */
+      --sale: #C8102E;     /* 할인율 */
+    }
+
     /* ===== 기본 설정 ===== */
     body {
       margin: 0;
       font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Segoe UI", "Noto Sans KR", sans-serif;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.01em;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      background-color: #FDF0F4;
-      color: #5A4A42;
-      font-size: 17px;
+      background-color: var(--bg);
+      color: var(--text);
+      font-size: 15px;
       line-height: 1.7;
     }
-
-    /* ===== 배경 거실 사진 (Unsplash 무료 라이선스 / 투명도 50%) ===== */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image: url("https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=2000&q=80");
-      background-size: cover;
-      background-position: center;
-      opacity: 0.28;
-      z-index: -1;
-      pointer-events: none;
+    a {
+      color: inherit;
     }
 
-    /* ===== 제목용 폰트 (Paperlogy) ===== */
-    h1, h2, h3,
-    nav a,
-    button,
-    .new-price,
-    .discount,
+    /* ===== 명조 제목 / 영문 라벨 ===== */
+    .serif,
+    h1, h2,
     .shop-name {
-      font-family: "Paperlogy", "Pretendard Variable", Pretendard, sans-serif;
-      letter-spacing: -0.03em;
+      font-family: "Noto Serif KR", "Nanum Myeongjo", serif;
+      font-weight: 500;
+      letter-spacing: -0.02em;
     }
-    h1, h2, h3 {
-      font-weight: 700;
+    .eng {
+      font-family: "Montserrat", "Pretendard Variable", sans-serif;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
     }
-    /* ===== 맨 위: 이름과 소개 ===== */
-    header {
-      background-color: transparent;
+
+    /* ===== 맨 위 띠 공지 ===== */
+    .topbar {
+      background-color: var(--accent-dark);
+      color: #FFF8F0;
       text-align: center;
-      padding: 28px 20px 22px 20px;
+      font-size: 12px;
+      padding: 9px 16px;
+      letter-spacing: 0.02em;
+    }
+
+    /* ===== 로고 ===== */
+    header {
+      text-align: center;
+      padding: 40px 20px 28px 20px;
+    }
+    header .eng {
+      margin: 0 0 6px 0;
+      font-size: 11px;
+      color: var(--accent);
     }
     header h1 {
       margin: 0;
-      font-size: 58px;
-      line-height: 1.15;
+      font-size: 38px;
+      line-height: 1.2;
+      letter-spacing: 0.04em;
     }
-    header p {
-      margin: 10px 0 0 0;
-      color: #8A7A72;
-    }
-
-    /* ===== 왼쪽 카테고리 + 오른쪽 상품 ===== */
-    .layout {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      max-width: 1260px;
-      margin: 0 auto;
-      padding: 0 20px 20px 20px;
-    }
-    main {
-      flex: 1;
-      min-width: 0;
-    }
-    /* 넓은 화면: 오른쪽에도 메뉴만큼 빈 공간을 둬서 상품이 화면 정가운데 오게 */
-    @media (min-width: 1300px) {
-      .layout::after {
-        content: "";
-        flex: 0 0 170px;
-      }
+    header .tagline {
+      margin: 8px 0 0 0;
+      font-size: 13px;
+      color: var(--sub);
     }
 
-    /* ===== 메뉴 (왼쪽 세로 배치) ===== */
+    /* ===== 카테고리 메뉴 (상단 가로, 둥근 알약 버튼) ===== */
     nav {
-      background-color: transparent;
-      flex: 0 0 170px;
-      padding: 8px 0;
       position: sticky;
-      top: 20px;
+      top: 0;
+      z-index: 10;
+      background-color: rgba(251, 248, 243, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 12px 20px;
     }
     nav a {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 4px 0;
-      padding: 9px 14px;
-      border-radius: 12px;
-      color: #5A4A42;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 5px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      color: var(--text);
       text-decoration: none;
-      font-weight: bold;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
     nav .count {
-      font-size: 13px;
-      font-weight: normal;
-      opacity: 0.6;
+      font-family: "Montserrat", sans-serif;
+      font-size: 10px;
+      color: var(--light);
+    }
+    nav a:hover {
+      background-color: var(--sand);
     }
     /* 선택된 카테고리 */
     nav a.active,
     nav a.active:hover {
-      background-color: #E8708E;
-      color: #FFFFFF;
+      background-color: var(--text);
+      color: #FFF8F0;
     }
     nav a.active .count {
-      opacity: 0.85;
+      color: rgba(255, 248, 240, 0.65);
     }
-    /* 고객센터 구분선 */
     nav .divider {
-      height: 1px;
-      background-color: #EBD5DD;
-      margin: 12px 10px;
+      width: 1px;
+      height: 14px;
+      margin: 0 6px;
+      background-color: var(--line);
     }
-    nav a:hover {
-      color: #E8A0B4;
-      background-color: rgba(255, 255, 255, 0.6);
+    nav .nav-cs {
+      color: var(--sub);
     }
 
-    /* ===== 배너 ===== */
-    .banner {
-      background-color: transparent;
-      max-width: 900px;
+    /* ===== 본문 폭 ===== */
+    .layout {
+      max-width: 1180px;
       margin: 0 auto;
-      text-align: left;
-      padding: 4px 0 18px 0;
+      padding: 0 24px;
+    }
+
+    /* ===== 배너 (왼쪽 글 + 오른쪽 사진) ===== */
+    .banner {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      align-items: stretch;
+      margin: 32px 0 12px 0;
+      border-radius: 24px;
+      overflow: hidden;
+      background-color: var(--sand);
+    }
+    .banner-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 56px 48px;
+    }
+    .banner .eng {
+      margin: 0 0 16px 0;
+      font-size: 11px;
+      color: var(--accent);
     }
     .banner h2 {
-      font-size: 27px;
-      margin: 0 0 10px 0;
+      margin: 0 0 14px 0;
+      font-size: 34px;
+      line-height: 1.35;
     }
     .banner p {
       margin: 0;
-      color: #8A7A72;
+      color: var(--sub);
       font-size: 15px;
     }
+    .banner-tag {
+      display: inline-block;
+      align-self: flex-start;
+      margin-top: 26px;
+      padding: 9px 20px;
+      border-radius: 999px;
+      background-color: var(--text);
+      color: #FFF8F0;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background-color 0.2s ease;
+    }
+    .banner-tag:hover {
+      background-color: var(--accent-dark);
+    }
+    .banner-img {
+      min-height: 320px;
+      background-image: url("https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=1200&q=80");
+      background-size: cover;
+      background-position: center;
+    }
 
-    /* ===== 상품 카드 (기존 대비 약 70% 크기 / 한 줄에 4개) ===== */
+    /* ===== 섹션 제목 ===== */
+    .section-title {
+      text-align: center;
+      margin: 60px 0 30px 0;
+    }
+    .section-title .eng {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: 0.24em;
+      color: var(--text);
+    }
+    .section-title p {
+      margin: 6px 0 0 0;
+      font-size: 13px;
+      color: var(--light);
+    }
+
+    /* ===== 상품 목록 (한 줄에 4개, 둥근 모서리 카드) ===== */
     .products {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 6px 0 40px 0;
+      gap: 40px 22px;
+      padding: 0 0 72px 0;
     }
     .card {
       position: relative;
-      background-color: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.75);
-      border-radius: 16px;
-      text-align: center;
-      padding: 16px 16px 18px 16px;
-      box-shadow: 0 1px 2px rgba(90, 74, 66, 0.04), 0 10px 24px rgba(90, 74, 66, 0.07);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 2px 4px rgba(90, 74, 66, 0.05), 0 16px 32px rgba(90, 74, 66, 0.11);
+      text-align: left;
     }
     .card .thumb {
       display: block;
       aspect-ratio: 1 / 1;
-      border-radius: 10px;
+      border-radius: 18px;
       overflow: hidden;
-      background-color: #F7EDF0;
+      background-color: var(--card);
+      box-shadow: 0 1px 2px rgba(46, 38, 34, 0.04);
+      transition: box-shadow 0.3s ease;
+    }
+    .card:hover .thumb {
+      box-shadow: 0 14px 30px rgba(110, 80, 55, 0.14);
     }
     .card .thumb img {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .card:hover .thumb img {
+      transform: scale(1.04);
     }
     .card .thumb-emoji {
       display: flex;
@@ -195,7 +265,7 @@
       font-size: 55px;
       line-height: 1;
     }
-    /* 배지 - 왼쪽 위에 세로로 쌓임 (BEST / 트렌드상품) */
+    /* 배지 - 사진 왼쪽 위 (TREND) */
     .badges {
       position: absolute;
       top: 10px;
@@ -207,131 +277,148 @@
       gap: 4px;
     }
     .badge {
-      background-color: #E8708E;
-      color: #FFFFFF;
+      font-family: "Montserrat", "Pretendard Variable", sans-serif;
+      background-color: rgba(46, 38, 34, 0.85);
+      backdrop-filter: blur(4px);
+      color: #FFF8F0;
       font-size: 10px;
-      font-weight: bold;
-      padding: 3px 7px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      padding: 4px 10px;
       border-radius: 999px;
       white-space: nowrap;
     }
-    /* 트렌드 키워드 점수 상위 10개 */
-    .badge-trend {
-      background-color: rgba(45, 38, 34, 0.86);
-      backdrop-filter: blur(2px);
-    }
-    /* 추석 상품 배지 - 오른쪽 위에 금색으로 강조 */
+    /* 추석 상품 배지 - 사진 오른쪽 위 */
     .badge-chuseok {
       position: absolute;
       top: 10px;
       right: 10px;
       z-index: 1;
-      background-color: #C9902F;
-      font-size: 11px;
-      padding: 3px 8px;
-      background-image: linear-gradient(180deg, #D3A045, #C08A2A);
+      background-color: var(--terracotta);
+      letter-spacing: 0.02em;
     }
     .card h3 {
-      font-family: "Pretendard Variable", Pretendard, sans-serif;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      margin: 9px 0 6px 0;
+      font-weight: 400;
+      margin: 14px 2px 8px 2px;
       font-size: 13px;
-      line-height: 1.4;
-      min-height: 37px;
+      line-height: 1.55;
+      min-height: 40px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
     .card h3 a {
-      color: #5A4A42;
+      color: #4A403A;
       text-decoration: none;
     }
     .card h3 a:hover {
-      color: #E8708E;
+      color: var(--accent-dark);
     }
     .old-price {
       display: block;
-      color: #B0A5A0;
+      text-align: right;
+      margin: 0 2px;
+      color: var(--light);
       text-decoration: line-through;
       font-size: 12px;
     }
-    /* 할인율 (정가 대비, 소수점 버림) - 가격보다 크게 강조 */
+    /* 할인율 (정가 대비, 소수점 버림) */
     .discount {
-      color: #E14C6D;
-      font-size: 21px;
-      font-weight: 800;
-      margin-right: 5px;
+      color: var(--sale);
+      font-size: 15px;
+      font-weight: 700;
+      margin: 0 5px 0 2px;
     }
     .new-price {
-      color: #3D332E;
+      display: block;
+      text-align: right;
+      margin: 0 2px;
+      color: var(--text);
       font-size: 16px;
-      font-weight: bold;
+      font-weight: 700;
+    }
+    .card br {
+      display: none;
     }
     .card button {
-      background-color: #FFE5EC;
+      display: block;
+      width: 100%;
+      margin-top: 12px;
+      padding: 10px 0;
+      background-color: var(--sand);
       border: none;
-      border-radius: 14px;
-      padding: 7px 17px;
+      border-radius: 999px;
+      color: var(--text);
+      font-family: inherit;
       font-size: 12px;
+      font-weight: 600;
       cursor: pointer;
-      margin-top: 10px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .card button:hover {
+      background-color: var(--accent);
+      color: #FFFFFF;
     }
 
     /* ===== 쇼핑몰 소개 + 이용 안내 ===== */
     .about {
-      max-width: 900px;
-      margin: 0 auto 40px auto;
-      padding: 34px 30px;
-      border-radius: 14px;
-      background-color: rgba(255, 255, 255, 0.82);
-      backdrop-filter: blur(4px);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+      margin: 0 0 80px 0;
+      padding: 56px 40px;
+      border-radius: 24px;
+      background-color: var(--card);
       text-align: center;
+    }
+    .about .eng {
+      margin: 0 0 12px 0;
+      font-size: 11px;
+      color: var(--accent);
     }
     .about h2 {
       margin: 0;
-      font-size: 22px;
+      font-size: 24px;
     }
     .about-lead {
-      margin: 8px 0 0 0;
-      color: #8A7A72;
-      font-size: 15px;
+      margin: 10px 0 0 0;
+      color: var(--sub);
+      font-size: 14px;
     }
     .notices {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 24px;
+      gap: 16px;
+      margin-top: 40px;
       text-align: left;
     }
     .notice {
-      background-color: #FDF0F4;
-      border-radius: 12px;
-      padding: 16px;
+      background-color: var(--bg);
+      border-radius: 18px;
+      padding: 26px 24px;
     }
     .notice-icon {
-      font-size: 26px;
-      line-height: 1;
+      font-family: "Montserrat", sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      color: var(--accent);
     }
     .notice h3 {
-      margin: 8px 0 6px 0;
-      font-size: 15px;
+      margin: 8px 0 10px 0;
+      font-size: 16px;
+      font-weight: 600;
     }
     .notice p {
       margin: 0;
       font-size: 13px;
-      line-height: 1.6;
-      color: #7A6A62;
+      line-height: 1.75;
+      color: var(--sub);
     }
 
     /* ===== 맨 아래: 이용 메뉴 + 가게 정보 ===== */
     footer {
-      border-top: 1px solid #EBD9E0;
-      background-color: transparent;
+      background-color: var(--sand);
       text-align: center;
-      padding: 44px 20px 52px 20px;
+      padding: 48px 20px 56px 20px;
     }
     .foot-menu {
       display: flex;
@@ -342,11 +429,10 @@
     }
     .foot-menu a {
       position: relative;
-      color: #5A4A42;
+      color: var(--text);
       text-decoration: none;
-      font-size: 14px;
-      font-weight: bold;
-      letter-spacing: -0.03em;
+      font-size: 13px;
+      font-weight: 500;
       padding: 6px 0;
     }
     /* 메뉴 사이 세로 구분선 */
@@ -357,82 +443,104 @@
       top: 50%;
       transform: translateY(-50%);
       width: 1px;
-      height: 12px;
-      background-color: #E0CBD3;
+      height: 11px;
+      background-color: #D9CCBD;
     }
     .foot-menu a:hover {
-      color: #E8708E;
+      color: var(--accent-dark);
     }
     .foot-info {
       margin-top: 26px;
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.9;
-      color: #7A6A62;
+      color: var(--sub);
     }
     .foot-info p {
       margin: 0;
     }
     .foot-info .shop-name {
-      margin-bottom: 6px;
-      font-size: 19px;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      color: #5A4A42;
+      margin-bottom: 8px;
+      font-size: 18px;
+      color: var(--text);
     }
     .foot-label {
       display: inline-block;
       min-width: 58px;
-      color: #A89890;
-      font-size: 13px;
+      color: var(--light);
+      font-size: 12px;
     }
     .foot-dim {
-      color: #A89890;
+      color: var(--light);
     }
     .copyright {
       margin: 26px 0 0 0;
-      font-size: 12px;
-      color: #B7A8A1;
-      letter-spacing: 0.02em;
+      font-family: "Montserrat", sans-serif;
+      font-size: 11px;
+      color: var(--light);
+      letter-spacing: 0.08em;
     }
 
     /* ===== 화면이 중간 폭일 때: 한 줄에 3개 ===== */
-    @media (max-width: 1150px) {
+    @media (max-width: 1000px) {
       .products {
         grid-template-columns: repeat(3, 1fr);
-        max-width: 700px;
       }
-      .banner,
-      .about {
-        max-width: 700px;
+      .banner-text {
+        padding: 44px 36px;
+      }
+      .banner h2 {
+        font-size: 28px;
       }
     }
-    /* ===== 화면이 좁을 때: 카테고리 가로 배치 + 한 줄에 2개 ===== */
-    @media (max-width: 780px) {
+    /* ===== 화면이 좁을 때: 메뉴 가로 스크롤 + 배너 세로 + 한 줄에 2개 ===== */
+    @media (max-width: 720px) {
       .layout {
-        display: block;
-        padding: 0 16px 20px 16px;
+        padding: 0 16px;
       }
-      nav {
-        position: static;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 4px;
-        padding: 0 0 12px 0;
-      }
-      nav a {
-        margin: 0;
+      header {
+        padding: 28px 16px 20px 16px;
       }
       header h1 {
-        font-size: 40px;
+        font-size: 30px;
+      }
+      nav {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 10px 16px;
+        scrollbar-width: none;
+      }
+      nav::-webkit-scrollbar {
+        display: none;
+      }
+      .banner {
+        grid-template-columns: 1fr;
+        margin-top: 20px;
+        border-radius: 20px;
+      }
+      .banner-img {
+        order: -1;
+        min-height: 200px;
+      }
+      .banner-text {
+        padding: 30px 24px 34px 24px;
+      }
+      .banner h2 {
+        font-size: 24px;
+      }
+      .section-title {
+        margin: 44px 0 22px 0;
       }
       .products {
         grid-template-columns: repeat(2, 1fr);
-        max-width: none;
+        gap: 30px 12px;
       }
-      .banner,
+      .card .thumb {
+        border-radius: 14px;
+      }
       .about {
-        max-width: none;
+        padding: 40px 20px;
+        border-radius: 20px;
       }
       .notices {
         grid-template-columns: 1fr;
@@ -442,35 +550,52 @@
 </head>
 <body>
 
-  <!-- 맨 위: 쇼핑몰 이름과 한 줄 소개 -->
+  <!-- 맨 위 띠 공지 -->
+  <div class="topbar">가을맞이 생활용품 최대 40% 할인 · 추석 선물세트 기획전 진행 중</div>
+
+  <!-- 쇼핑몰 이름과 한 줄 소개 -->
   <header>
-    <h1>🌷 소소상점</h1>
-    <p>소소한 하루를 편안하게 채워주는 생활용품</p>
+    <p class="eng">Soso Little Store</p>
+    <h1>소소상점</h1>
+    <p class="tagline">소소한 하루를 편안하게 채워주는 생활용품</p>
   </header>
 
-  <!-- 왼쪽: 카테고리 / 오른쪽: 배너 + 상품 -->
-  <div class="layout">
+  <!-- 카테고리 메뉴 (상단 가로) -->
+  <nav>
+    <a class="cat active" data-category="전체" onclick="filterCategory(this)">전체상품<span class="count"></span></a>
+    <a class="cat" data-category="추석선물세트" onclick="filterCategory(this)">추석선물세트<span class="count"></span></a>
+    <a class="cat" data-category="주방용품" onclick="filterCategory(this)">주방용품<span class="count"></span></a>
+    <a class="cat" data-category="생활용품" onclick="filterCategory(this)">생활용품<span class="count"></span></a>
+    <a class="cat" data-category="욕실용품" onclick="filterCategory(this)">욕실용품<span class="count"></span></a>
+    <a class="cat" data-category="패션잡화" onclick="filterCategory(this)">패션잡화<span class="count"></span></a>
+    <a class="cat" data-category="문구장난감" onclick="filterCategory(this)">문구·장난감<span class="count"></span></a>
+    <span class="divider"></span>
+    <a class="nav-cs" href="#">고객센터</a>
+  </nav>
 
-    <!-- 카테고리 메뉴 (왼쪽) -->
-    <nav>
-      <a class="cat active" data-category="전체" onclick="filterCategory(this)">전체상품<span class="count"></span></a>
-      <a class="cat" data-category="추석선물세트" onclick="filterCategory(this)">🌕 추석선물세트<span class="count"></span></a>
-      <a class="cat" data-category="주방용품" onclick="filterCategory(this)">주방용품<span class="count"></span></a>
-      <a class="cat" data-category="생활용품" onclick="filterCategory(this)">생활용품<span class="count"></span></a>
-      <a class="cat" data-category="욕실용품" onclick="filterCategory(this)">욕실용품<span class="count"></span></a>
-      <a class="cat" data-category="패션잡화" onclick="filterCategory(this)">패션잡화<span class="count"></span></a>
-      <a class="cat" data-category="문구장난감" onclick="filterCategory(this)">문구·장난감<span class="count"></span></a>
-      <div class="divider"></div>
-      <a href="#">고객센터</a>
-    </nav>
+  <!-- 배너 + 상품 -->
+  <div class="layout">
 
     <main>
 
       <!-- 배너 -->
       <div class="banner">
-        <h2>오늘도 소소하게, 편안하게 🍃</h2>
-        <p>가을맞이 생활용품 최대 40% 할인</p>
+        <div class="banner-text">
+          <p class="eng">Autumn Collection</p>
+          <h2>오늘도 소소하게,<br>편안하게</h2>
+          <p>가을맞이 생활용품 최대 40% 할인</p>
+          <a class="banner-tag" href="#best">추천 상품 보러가기</a>
+        </div>
+        <!-- 배너 사진 (Unsplash 무료 라이선스 거실 사진) -->
+        <div class="banner-img" role="img" aria-label="따뜻한 햇살이 드는 거실"></div>
       </div>
+
+      <!-- 섹션 제목 -->
+      <div class="section-title" id="best">
+        <p class="eng">Best Items</p>
+        <p>소소상점이 고른 이번 주 추천 상품</p>
+      </div>
+
 
       <!-- 상품 카드 (스마트스토어 상품 41개 / 2026-09-15 엑셀 기준) -->
       <div class="products">
@@ -479,7 +604,7 @@
 
     <div class="card" data-name="달걀보관함 계란트레이 3단 30구 냉장고 정리함 오토폴딩 보관날짜" data-category="주방용품" data-trend-rank="1">
       <div class="badges">
-        <span class="badge badge-trend">🔥 트렌드상품</span>
+        <span class="badge badge-trend">TREND</span>
       </div>
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301655" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260804_210/1785811560336hcqOK_GIF/16971650967CDB889C44D1E6C80CD080_img_760.jpg?type=f300_300" alt="달걀보관함 계란트레이 3단 30구 냉장고 정리함 오토폴딩 보관날짜" loading="lazy">
@@ -492,9 +617,9 @@
 
     <div class="card" data-name="CJ 스팸복합 복 에디션 1세트 추석선물세트 스팸 식용유 소금 명절 답례품" data-category="추석선물세트" data-trend-rank="2">
       <div class="badges">
-        <span class="badge badge-trend">🔥 트렌드상품</span>
+        <span class="badge badge-trend">TREND</span>
       </div>
-      <span class="badge badge-chuseok">🌕 추석선물</span>
+      <span class="badge badge-chuseok">추석선물</span>
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13736819038" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260828_250/1787883499177fiSWd_JPEG/122016302294139706_937518472.jpg?type=f300_300" alt="CJ 스팸복합 복 에디션 1세트 추석선물세트 스팸 식용유 소금 명절 답례품" loading="lazy">
       </a>
@@ -506,9 +631,9 @@
 
     <div class="card" data-name="CJ스팸 G호 5세트 추석 선물세트 200g 6개 340g 2개 명절 답례품 기업 학교 가정용" data-category="추석선물세트" data-trend-rank="3">
       <div class="badges">
-        <span class="badge badge-trend">🔥 트렌드상품</span>
+        <span class="badge badge-trend">TREND</span>
       </div>
-      <span class="badge badge-chuseok">🌕 추석선물</span>
+      <span class="badge badge-chuseok">추석선물</span>
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13736818839" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260828_184/1787883509693MN76b_JPEG/122016312808773660_1153998569.jpg?type=f300_300" alt="CJ스팸 G호 5세트 추석 선물세트 200g 6개 340g 2개 명절 답례품 기업 학교 가정용" loading="lazy">
       </a>
@@ -520,9 +645,9 @@
 
     <div class="card" data-name="CJ 스팸복합 복 에디션 5세트 추석선물세트 스팸 식용유 소금 명절 답례품" data-category="추석선물세트" data-trend-rank="4">
       <div class="badges">
-        <span class="badge badge-trend">🔥 트렌드상품</span>
+        <span class="badge badge-trend">TREND</span>
       </div>
-      <span class="badge badge-chuseok">🌕 추석선물</span>
+      <span class="badge badge-chuseok">추석선물</span>
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13736818731" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260828_250/1787883499177fiSWd_JPEG/122016302294139706_937518472.jpg?type=f300_300" alt="CJ 스팸복합 복 에디션 5세트 추석선물세트 스팸 식용유 소금 명절 답례품" loading="lazy">
       </a>
@@ -534,9 +659,9 @@
 
     <div class="card" data-name="비비고 초사리곱창돌김 캔김 5세트 추석선물 25g 6캔 기업 학교 가정용 답례품" data-category="추석선물세트" data-trend-rank="5">
       <div class="badges">
-        <span class="badge badge-trend">🔥 트렌드상품</span>
+        <span class="badge badge-trend">TREND</span>
       </div>
-      <span class="badge badge-chuseok">🌕 추석선물</span>
+      <span class="badge badge-chuseok">추석선물</span>
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13735951922" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260827_118/1787816765912BdKIj_JPEG/79002945711499163_1155857768.jpg?type=f300_300" alt="비비고 초사리곱창돌김 캔김 5세트 추석선물 25g 6캔 기업 학교 가정용 답례품" loading="lazy">
       </a>
@@ -548,9 +673,9 @@
 
     <div class="card" data-name="엘지선물세트 히말라야 핑크솔트 에센셜 N호 1박스 6개세트 추석선물세트" data-category="추석선물세트" data-trend-rank="6">
       <div class="badges">
-        <span class="badge badge-trend">🔥 트렌드상품</span>
+        <span class="badge badge-trend">TREND</span>
       </div>
-      <span class="badge badge-chuseok">🌕 추석선물</span>
+      <span class="badge badge-chuseok">추석선물</span>
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13735690356" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260827_82/1787802309651I6VxJ_JPEG/35046888716211064_185048851.jpg?type=f300_300" alt="엘지선물세트 히말라야 핑크솔트 에센셜 N호 1박스 6개세트 추석선물세트" loading="lazy">
       </a>
@@ -562,9 +687,9 @@
 
     <div class="card" data-name="스팸8호 선물세트 200g 9캔 추석명절 선물세트 기업 학교 가정용" data-category="추석선물세트" data-trend-rank="7">
       <div class="badges">
-        <span class="badge badge-trend">🔥 트렌드상품</span>
+        <span class="badge badge-trend">TREND</span>
       </div>
-      <span class="badge badge-chuseok">🌕 추석선물</span>
+      <span class="badge badge-chuseok">추석선물</span>
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13735527863" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260827_137/1787792038988zfFKf_JPEG/17792492102173047_1617161878.jpg?type=f300_300" alt="스팸8호 선물세트 200g 9캔 추석명절 선물세트 기업 학교 가정용" loading="lazy">
       </a>
@@ -576,9 +701,9 @@
 
     <div class="card" data-name="엘지선물세트 생활의 품격 ON호 명절 추석 5종 선물세트 기업 가정 학교" data-category="추석선물세트" data-trend-rank="8">
       <div class="badges">
-        <span class="badge badge-trend">🔥 트렌드상품</span>
+        <span class="badge badge-trend">TREND</span>
       </div>
-      <span class="badge badge-chuseok">🌕 추석선물</span>
+      <span class="badge badge-chuseok">추석선물</span>
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13735527741" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260827_237/1787792025607n6zep_JPEG/8501153201930505_1547529025.jpg?type=f300_300" alt="엘지선물세트 생활의 품격 ON호 명절 추석 5종 선물세트 기업 가정 학교" loading="lazy">
       </a>
@@ -590,9 +715,9 @@
 
     <div class="card" data-name="동원 S12호 참치선물세트 90g 12캔 명절 추석 선물세트 기업 학교 가정용" data-category="추석선물세트" data-trend-rank="9">
       <div class="badges">
-        <span class="badge badge-trend">🔥 트렌드상품</span>
+        <span class="badge badge-trend">TREND</span>
       </div>
-      <span class="badge badge-chuseok">🌕 추석선물</span>
+      <span class="badge badge-chuseok">추석선물</span>
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13735527576" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260827_226/1787792015460aUCnQ_JPEG/121924784600137527_739745683.jpg?type=f300_300" alt="동원 S12호 참치선물세트 90g 12캔 명절 추석 선물세트 기업 학교 가정용" loading="lazy">
       </a>
@@ -604,7 +729,7 @@
 
     <div class="card" data-name="휴대편안 500ml 접이식 보온보냉 실리콘 텀블러 BPA FREE 선물용 인쇄가능" data-category="주방용품" data-trend-rank="10">
       <div class="badges">
-        <span class="badge badge-trend">🔥 트렌드상품</span>
+        <span class="badge badge-trend">TREND</span>
       </div>
       <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13697301665" target="_blank" rel="noopener">
         <img src="https://shop-phinf.pstatic.net/20260805_62/1785932213094koKg1_JPEG/87876226883628623_856490976.jpg?type=f300_300" alt="휴대편안 500ml 접이식 보온보냉 실리콘 텀블러 BPA FREE 선물용 인쇄가능" loading="lazy">
@@ -928,24 +1053,25 @@
 
       <!-- 쇼핑몰 소개 + 이용 안내 -->
       <section class="about">
+        <p class="eng">About Us</p>
         <h2>편안한 생활과 함께하는 소소상점입니다.</h2>
         <p class="about-lead">소소상점이 써보고 엄선한 상품만 골라 보여드립니다.</p>
 
         <div class="notices">
           <div class="notice">
-            <div class="notice-icon">🚚</div>
+            <div class="notice-icon">01 DELIVERY</div>
             <h3>배송 안내</h3>
             <p>모든 상품은 일반택배로 발송됩니다. 기본 배송비는 3,000원이며, 상품에 따라 조건부 무료배송이 적용됩니다.</p>
           </div>
 
           <div class="notice">
-            <div class="notice-icon">🔄</div>
+            <div class="notice-icon">02 RETURN</div>
             <h3>교환 · 반품 안내</h3>
             <p>상품을 받으신 날부터 7일 이내에 신청하실 수 있습니다. 반품 배송비 3,000원, 교환 배송비 6,000원부터입니다.</p>
           </div>
 
           <div class="notice">
-            <div class="notice-icon">💬</div>
+            <div class="notice-icon">03 CS CENTER</div>
             <h3>고객센터</h3>
             <p>02-1234-5678<br>평일 오전 10시 ~ 오후 6시<br>(주말 · 공휴일 휴무)</p>
           </div>
@@ -972,7 +1098,7 @@
       <p><span class="foot-label">상담시간</span> 평일 오전 10시 ~ 오후 6시 <span class="foot-dim">(주말 · 공휴일 휴무)</span></p>
     </div>
 
-    <p class="copyright">© 2026 소소상점</p>
+    <p class="copyright">© 2026 SOSO LITTLE STORE</p>
   </footer>
 
   <script>
