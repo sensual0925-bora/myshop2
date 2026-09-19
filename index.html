@@ -126,6 +126,52 @@
       text-align: center;
     }
 
+    /* ===== 스크롤해도 따라오는 장바구니 버튼 (위쪽 버튼이 화면 밖으로 나가면 나타남) ===== */
+    .float-cart {
+      position: fixed;
+      top: 11px;
+      right: max(24px, calc((100% - 1180px) / 2 + 24px));
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background-color: var(--card);
+      color: var(--text);
+      box-shadow: 0 6px 18px rgba(46, 38, 34, 0.12);
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease, background-color 0.2s ease;
+    }
+    .float-cart.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .float-cart:hover {
+      background-color: var(--sand);
+    }
+    .float-cart svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .float-cart .cart-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+    }
+
     /* ===== 어두운 배경 (로그인 창 · 장바구니 열릴 때) ===== */
     .overlay {
       position: fixed;
@@ -921,8 +967,14 @@
         justify-content: flex-start;
         flex-wrap: nowrap;
         overflow-x: auto;
-        padding: 10px 16px;
+        padding: 10px 64px 10px 16px;  /* 오른쪽은 따라오는 장바구니 버튼 자리 */
         scrollbar-width: none;
+      }
+      .float-cart {
+        top: 9px;
+        right: 12px;
+        /* 옆으로 밀리는 메뉴 글자가 버튼 뒤로 자연스럽게 사라지도록 왼쪽에 크림색 번짐 */
+        box-shadow: 0 6px 18px rgba(46, 38, 34, 0.12), -22px 0 16px 8px rgba(251, 248, 243, 0.96);
       }
       nav::-webkit-scrollbar {
         display: none;
@@ -981,6 +1033,12 @@
         <em class="cart-count" id="cartCount">0</em>
       </button>
     </div>
+
+    <!-- 스크롤하면 오른쪽 위에 계속 보이는 장바구니 버튼 -->
+    <button type="button" class="float-cart" id="floatCart" onclick="openCart()" aria-label="장바구니 보기" title="장바구니">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <em class="cart-count" id="floatCount">0</em>
+    </button>
 
     <p class="eng">Soso Little Store</p>
     <h1>소소상점</h1>
@@ -1699,6 +1757,7 @@
         list.innerHTML = '<li class="cart-empty">장바구니가 비어 있어요.</li>';
       }
       document.getElementById('cartCount').textContent = count;
+      document.getElementById('floatCount').textContent = count;
       document.getElementById('cartTotal').textContent = won(total);
     }
 
@@ -1768,6 +1827,15 @@
       cart = cart.filter(function (it) { return urls.indexOf(it.url) !== -1; });
       saveCart();
       renderCart();
+
+      // 위쪽 장바구니 버튼이 화면 밖으로 나가면, 따라오는 장바구니 버튼 보이기
+      var util = document.querySelector('.util');
+      var floatCart = document.getElementById('floatCart');
+      function updateFloatCart() {
+        floatCart.classList.toggle('show', util.getBoundingClientRect().bottom < 0);
+      }
+      window.addEventListener('scroll', updateFloatCart, { passive: true });
+      updateFloatCart();
     });
   </script>
 
