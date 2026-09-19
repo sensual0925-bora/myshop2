@@ -104,6 +104,13 @@
     .util-btn[hidden] {
       display: none;
     }
+    /* 로그인 후 "OOO님, 좋은 하루 되세요!" - 너무 길면 … 으로 줄임 */
+    #accountLabel {
+      max-width: 260px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
     .util-btn:hover {
       background-color: var(--sand);
     }
@@ -966,6 +973,9 @@
         padding: 8px 9px;
         font-size: 12px;
       }
+      #accountLabel {
+        max-width: 190px;
+      }
       .login-modal {
         padding: 40px 24px 28px 24px;
       }
@@ -1595,6 +1605,7 @@
     <h2 id="loginTitle">로그인</h2>
     <!-- 창 모드: login(로그인) · signup(회원가입) · reset(비밀번호 찾기) · newpw(새 비밀번호) -->
     <form id="authForm" onsubmit="return submitAuth(this)" novalidate>
+      <input type="text" name="fullname" placeholder="이름" autocomplete="name" maxlength="20">
       <input type="email" name="email" placeholder="이메일" autocomplete="email" required>
       <input type="password" name="pw" placeholder="비밀번호" autocomplete="current-password" minlength="6" required>
       <input type="password" name="pw2" placeholder="비밀번호 확인" autocomplete="new-password" minlength="6">
@@ -1817,10 +1828,10 @@
 
     // 창 모드별 문구와 보이는 칸
     var AUTH_MODES = {
-      login:  { eng: 'Member Login',  title: '로그인',      submit: '로그인',              email: true,  pw: true,  pw2: false },
-      signup: { eng: 'Join Us',       title: '회원가입',    submit: '가입하기',            email: true,  pw: true,  pw2: true  },
-      reset:  { eng: 'Find Password', title: '비밀번호 찾기', submit: '재설정 메일 보내기', email: true,  pw: false, pw2: false },
-      newpw:  { eng: 'New Password',  title: '새 비밀번호',  submit: '비밀번호 변경',       email: false, pw: true,  pw2: true  }
+      login:  { eng: 'Member Login',  title: '로그인',      submit: '로그인',              name: false, email: true,  pw: true,  pw2: false },
+      signup: { eng: 'Join Us',       title: '회원가입',    submit: '가입하기',            name: true,  email: true,  pw: true,  pw2: true  },
+      reset:  { eng: 'Find Password', title: '비밀번호 찾기', submit: '재설정 메일 보내기', name: false, email: true,  pw: false, pw2: false },
+      newpw:  { eng: 'New Password',  title: '새 비밀번호',  submit: '비밀번호 변경',       name: false, email: false, pw: true,  pw2: true  }
     };
 
     function setAuthMode(mode) {
@@ -1832,6 +1843,7 @@
       document.getElementById('loginEng').textContent = m.eng;
       document.getElementById('loginTitle').textContent = m.title;
       document.getElementById('authSubmit').textContent = m.submit;
+      form.fullname.hidden = !m.name;
       form.email.hidden = !m.email;
       form.pw.hidden = !m.pw;
       form.pw2.hidden = !m.pw2;
@@ -1914,7 +1926,12 @@
       var pw = form.pw.value;
       var pw2 = form.pw2.value;
 
+      var name = form.fullname.value.trim();
       var needPw2 = (authMode === 'signup' || authMode === 'newpw');
+      if (authMode === 'signup' && name === '') {
+        setAuthMsg('이름을 입력해 주세요.');
+        return false;
+      }
       if (authMode !== 'newpw' && email === '') {
         setAuthMsg('이메일을 입력해 주세요.');
         return false;
@@ -1946,7 +1963,8 @@
       if (mode === 'login') {
         job = sb.auth.signInWithPassword({ email: email, password: pw });
       } else if (mode === 'signup') {
-        job = sb.auth.signUp({ email: email, password: pw, options: { emailRedirectTo: PAGE_URL } });
+        // 이름은 회원 정보(user_metadata)에 함께 저장
+        job = sb.auth.signUp({ email: email, password: pw, options: { emailRedirectTo: PAGE_URL, data: { name: name } } });
       } else if (mode === 'reset') {
         job = sb.auth.resetPasswordForEmail(email, { redirectTo: PAGE_URL });
       } else {
@@ -1963,7 +1981,7 @@
         }
         if (mode === 'login') {
           closeAll();
-          showToast(email.split('@')[0] + '님, 반가워요.');
+          showToast(displayName(res.data.user) + '님, 반가워요.');
         } else if (mode === 'signup') {
           var user = res.data.user;
           if (user && user.identities && user.identities.length === 0) {
@@ -1991,13 +2009,19 @@
       return false;
     }
 
-    // 오른쪽 위 계정 버튼: 로그인 전 → 로그인 창 / 로그인 후 → 로그아웃
+    // 회원 이름 (가입할 때 넣은 이름, 없으면 이메일 앞부분)
+    function displayName(user) {
+      var meta = (user && user.user_metadata) || {};
+      return meta.name || (user && user.email ? user.email.split('@')[0] : '회원');
+    }
+
+    // 오른쪽 위 계정 버튼: 로그인 전 → 로그인 창 / 로그인 후 → 로그아웃 확인
     function onAccountClick() {
       if (!currentUser) {
         openLogin('login');
         return;
       }
-      if (confirm(currentUser.email + '\n로그아웃할까요?')) {
+      if (confirm('로그아웃할까요?')) {
         sb.auth.signOut().then(function () {
           showToast('로그아웃했어요.');
         });
@@ -2006,8 +2030,8 @@
 
     function updateAccountBtn() {
       var btn = document.getElementById('accountBtn');
-      document.getElementById('accountLabel').textContent = currentUser ? '로그아웃' : '로그인';
-      btn.title = currentUser ? currentUser.email + ' 로그인 중' : '';
+      document.getElementById('accountLabel').textContent = currentUser ? displayName(currentUser) + '님, 좋은 하루 되세요!' : '로그인';
+      btn.title = currentUser ? currentUser.email + ' · 누르면 로그아웃' : '';
       // 로그인하면 회원가입 버튼은 숨김
       document.getElementById('signupBtn').hidden = !!currentUser;
     }
