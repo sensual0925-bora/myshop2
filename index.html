@@ -24,7 +24,6 @@
       --light: #AFA398;
       --accent: #B07A52;   /* 카멜 */
       --accent-dark: #8E5E3C;
-      --terracotta: #B8664A; /* 추석 배지 */
       --sale: #C8102E;     /* 할인율 */
     }
 
@@ -70,8 +69,401 @@
 
     /* ===== 로고 ===== */
     header {
+      position: relative;
       text-align: center;
       padding: 40px 20px 28px 20px;
+    }
+
+    /* ===== 오른쪽 위: 로그인 · 장바구니 버튼 ===== */
+    .util {
+      position: absolute;
+      top: 18px;
+      right: max(24px, calc((100% - 1180px) / 2 + 24px));
+      display: flex;
+      gap: 4px;
+    }
+    .util-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 999px;
+      background-color: transparent;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .util-btn:hover {
+      background-color: var(--sand);
+    }
+    .util-btn svg {
+      width: 19px;
+      height: 19px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .cart-count {
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      box-sizing: border-box;
+      border-radius: 999px;
+      background-color: var(--accent);
+      color: #FFFFFF;
+      font-family: "Montserrat", sans-serif;
+      font-size: 10px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 18px;
+      text-align: center;
+    }
+
+    /* ===== 어두운 배경 (로그인 창 · 장바구니 열릴 때) ===== */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background-color: rgba(46, 38, 34, 0.42);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 50%;
+      background-color: transparent;
+      color: var(--sub);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .close-btn:hover {
+      background-color: var(--sand);
+      color: var(--text);
+    }
+
+    /* ===== 로그인 창 ===== */
+    .login-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      z-index: 50;
+      width: min(400px, calc(100% - 32px));
+      box-sizing: border-box;
+      padding: 44px 36px 34px 36px;
+      border-radius: 24px;
+      background-color: var(--bg);
+      box-shadow: 0 24px 60px rgba(46, 38, 34, 0.25);
+      transform: translate(-50%, -46%);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+    }
+    .login-modal.show {
+      transform: translate(-50%, -50%);
+      opacity: 1;
+      visibility: visible;
+    }
+    .login-modal .eng {
+      margin: 0;
+      text-align: center;
+      font-size: 11px;
+      color: var(--accent);
+    }
+    .login-modal h2 {
+      margin: 6px 0 26px 0;
+      text-align: center;
+      font-size: 26px;
+    }
+    .login-modal input {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      padding: 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background-color: var(--card);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+    .login-modal input:focus {
+      border-color: var(--accent);
+    }
+    .login-keep {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 4px 0 18px 2px;
+      font-size: 13px;
+      color: var(--sub);
+      cursor: pointer;
+    }
+    .login-keep input {
+      display: inline-block;
+      width: auto;
+      margin: 0;
+      accent-color: var(--accent);
+    }
+    .btn-dark,
+    .btn-light {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 14px 0;
+      border: none;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .btn-dark {
+      background-color: var(--text);
+      color: #FFF8F0;
+    }
+    .btn-dark:hover {
+      background-color: var(--accent-dark);
+    }
+    .btn-light {
+      margin-top: 10px;
+      background-color: var(--sand);
+      color: var(--text);
+    }
+    .btn-light:hover {
+      background-color: #E9DDCF;
+    }
+    .login-links {
+      display: flex;
+      justify-content: center;
+      gap: 0 22px;
+      margin: 18px 0 0 0;
+      font-size: 12px;
+    }
+    .login-links a {
+      position: relative;
+      color: var(--sub);
+      text-decoration: none;
+    }
+    .login-links a + a::before {
+      content: "";
+      position: absolute;
+      left: -11px;
+      top: 50%;
+      width: 1px;
+      height: 10px;
+      transform: translateY(-50%);
+      background-color: var(--line);
+    }
+    .login-links a:hover {
+      color: var(--text);
+    }
+    .login-or {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0 14px 0;
+      font-size: 12px;
+      color: var(--light);
+    }
+    .login-or::before,
+    .login-or::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: var(--line);
+    }
+
+    /* ===== 장바구니 (오른쪽에서 열리는 창) ===== */
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      width: min(420px, 100%);
+      background-color: var(--bg);
+      box-shadow: -12px 0 40px rgba(46, 38, 34, 0.18);
+      transform: translateX(100%);
+      visibility: hidden;
+      transition: transform 0.3s ease, visibility 0.3s ease;
+    }
+    .cart-drawer.show {
+      transform: translateX(0);
+      visibility: visible;
+    }
+    .cart-head {
+      position: relative;
+      padding: 26px 28px 20px 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .cart-head .eng {
+      margin: 0;
+      font-size: 11px;
+      color: var(--accent);
+    }
+    .cart-head h2 {
+      margin: 4px 0 0 0;
+      font-size: 22px;
+    }
+    .cart-list {
+      flex: 1;
+      overflow-y: auto;
+      margin: 0;
+      padding: 8px 28px;
+      list-style: none;
+    }
+    .cart-item {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 14px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .cart-item img {
+      width: 76px;
+      height: 76px;
+      border-radius: 12px;
+      object-fit: cover;
+      background-color: var(--card);
+    }
+    .cart-item-name {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #4A403A;
+      text-decoration: none;
+    }
+    .cart-item-name:hover {
+      color: var(--accent-dark);
+    }
+    .cart-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .qty {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background-color: var(--card);
+    }
+    .qty button {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: none;
+      color: var(--sub);
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .qty span {
+      min-width: 22px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .cart-item-price {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .cart-item-remove {
+      margin-top: 6px;
+      padding: 0;
+      border: none;
+      background: none;
+      color: var(--light);
+      font-family: inherit;
+      font-size: 12px;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+    .cart-item-remove:hover {
+      color: var(--text);
+    }
+    .cart-empty {
+      padding: 80px 0;
+      text-align: center;
+      font-size: 14px;
+      color: var(--light);
+    }
+    .cart-foot {
+      padding: 20px 28px 26px 28px;
+      border-top: 1px solid var(--line);
+      background-color: var(--card);
+    }
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 14px;
+      font-size: 14px;
+      color: var(--sub);
+    }
+    .cart-total strong {
+      font-size: 20px;
+      color: var(--text);
+    }
+    .cart-note {
+      margin: 12px 0 0 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--light);
+    }
+
+    /* ===== 알림 메시지 (장바구니 담기 등) ===== */
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 32px;
+      z-index: 60;
+      max-width: calc(100% - 32px);
+      box-sizing: border-box;
+      padding: 13px 22px;
+      border-radius: 999px;
+      background-color: rgba(46, 38, 34, 0.92);
+      color: #FFF8F0;
+      font-size: 13px;
+      text-align: center;
+      transform: translate(-50%, 16px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+    }
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+      visibility: visible;
     }
     header .eng {
       margin: 0 0 6px 0;
@@ -288,15 +680,6 @@
       border-radius: 999px;
       white-space: nowrap;
     }
-    /* 추석 상품 배지 - 사진 오른쪽 위 */
-    .badge-chuseok {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 1;
-      background-color: var(--terracotta);
-      letter-spacing: 0.02em;
-    }
     .card h3 {
       font-weight: 400;
       margin: 14px 2px 8px 2px;
@@ -341,11 +724,23 @@
     .card br {
       display: none;
     }
-    .card button {
-      display: block;
-      width: 100%;
+    /* 수량 선택(− 1 +) + 장바구니 버튼 */
+    .buy {
+      display: flex;
+      gap: 6px;
       margin-top: 12px;
-      padding: 10px 0;
+    }
+    .buy .qty {
+      flex: 0 0 auto;
+    }
+    .buy .qty button {
+      height: 34px;
+    }
+    .card .add {
+      flex: 1;
+      min-width: 0;
+      padding: 0 4px;
+      white-space: nowrap;
       background-color: var(--sand);
       border: none;
       border-radius: 999px;
@@ -356,7 +751,7 @@
       cursor: pointer;
       transition: background-color 0.2s ease, color 0.2s ease;
     }
-    .card button:hover {
+    .card .add:hover {
       background-color: var(--accent);
       color: #FFFFFF;
     }
@@ -498,7 +893,18 @@
         padding: 0 16px;
       }
       header {
-        padding: 28px 16px 20px 16px;
+        padding: 58px 16px 20px 16px;
+      }
+      .util {
+        top: 10px;
+        right: 10px;
+      }
+      .util-btn {
+        padding: 8px 9px;
+        font-size: 12px;
+      }
+      .login-modal {
+        padding: 40px 24px 28px 24px;
       }
       header h1 {
         font-size: 30px;
@@ -551,10 +957,23 @@
 <body>
 
   <!-- 맨 위 띠 공지 -->
-  <div class="topbar">가을맞이 생활용품 최대 40% 할인 · 추석 선물세트 기획전 진행 중</div>
+  <div class="topbar">가을맞이 생활용품 최대 40% 할인</div>
 
   <!-- 쇼핑몰 이름과 한 줄 소개 -->
   <header>
+    <!-- 오른쪽 위: 로그인 · 장바구니 -->
+    <div class="util">
+      <button type="button" class="util-btn" onclick="openLogin()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+        <span>로그인</span>
+      </button>
+      <button type="button" class="util-btn" onclick="openCart()">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span>장바구니</span>
+        <em class="cart-count" id="cartCount">0</em>
+      </button>
+    </div>
+
     <p class="eng">Soso Little Store</p>
     <h1>소소상점</h1>
     <p class="tagline">소소한 하루를 편안하게 채워주는 생활용품</p>
@@ -563,7 +982,6 @@
   <!-- 카테고리 메뉴 (상단 가로) -->
   <nav>
     <a class="cat active" data-category="전체" onclick="filterCategory(this)">전체상품<span class="count"></span></a>
-    <a class="cat" data-category="추석선물세트" onclick="filterCategory(this)">추석선물세트<span class="count"></span></a>
     <a class="cat" data-category="주방용품" onclick="filterCategory(this)">주방용품<span class="count"></span></a>
     <a class="cat" data-category="생활용품" onclick="filterCategory(this)">생활용품<span class="count"></span></a>
     <a class="cat" data-category="욕실용품" onclick="filterCategory(this)">욕실용품<span class="count"></span></a>
@@ -597,7 +1015,7 @@
       </div>
 
 
-      <!-- 상품 카드 (스마트스토어 상품 41개 / 2026-09-15 엑셀 기준) -->
+      <!-- 상품 카드 (스마트스토어 상품 33개 / 2026-09-15 엑셀 기준, 추석선물세트 제외) -->
       <div class="products">
 
     <!-- 정렬 기준: 트렌드 상위 10개(트렌드상품 배지) → 신상품 → 나머지 -->
@@ -612,119 +1030,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301655" target="_blank" rel="noopener" title="달걀보관함 계란트레이 3단 30구 냉장고 정리함 오토폴딩 보관날짜">달걀보관함 계란트레이 3단 30구 냉장고 정리함 오토폴딩 보관날짜</a></h3>
       <span class="new-price">7,900원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="CJ 스팸복합 복 에디션 1세트 추석선물세트 스팸 식용유 소금 명절 답례품" data-category="추석선물세트" data-trend-rank="2">
-      <div class="badges">
-        <span class="badge badge-trend">TREND</span>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
       </div>
-      <span class="badge badge-chuseok">추석선물</span>
-      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13736819038" target="_blank" rel="noopener">
-        <img src="https://shop-phinf.pstatic.net/20260828_250/1787883499177fiSWd_JPEG/122016302294139706_937518472.jpg?type=f300_300" alt="CJ 스팸복합 복 에디션 1세트 추석선물세트 스팸 식용유 소금 명절 답례품" loading="lazy">
-      </a>
-      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13736819038" target="_blank" rel="noopener" title="CJ 스팸복합 복 에디션 1세트 추석선물세트 스팸 식용유 소금 명절 답례품">CJ 스팸복합 복 에디션 1세트 추석선물세트 스팸 식용유 소금 명절 답례품</a></h3>
-      <span class="new-price">70,000원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="CJ스팸 G호 5세트 추석 선물세트 200g 6개 340g 2개 명절 답례품 기업 학교 가정용" data-category="추석선물세트" data-trend-rank="3">
-      <div class="badges">
-        <span class="badge badge-trend">TREND</span>
-      </div>
-      <span class="badge badge-chuseok">추석선물</span>
-      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13736818839" target="_blank" rel="noopener">
-        <img src="https://shop-phinf.pstatic.net/20260828_184/1787883509693MN76b_JPEG/122016312808773660_1153998569.jpg?type=f300_300" alt="CJ스팸 G호 5세트 추석 선물세트 200g 6개 340g 2개 명절 답례품 기업 학교 가정용" loading="lazy">
-      </a>
-      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13736818839" target="_blank" rel="noopener" title="CJ스팸 G호 5세트 추석 선물세트 200g 6개 340g 2개 명절 답례품 기업 학교 가정용">CJ스팸 G호 5세트 추석 선물세트 200g 6개 340g 2개 명절 답례품 기업 학교 가정용</a></h3>
-      <span class="new-price">280,000원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="CJ 스팸복합 복 에디션 5세트 추석선물세트 스팸 식용유 소금 명절 답례품" data-category="추석선물세트" data-trend-rank="4">
-      <div class="badges">
-        <span class="badge badge-trend">TREND</span>
-      </div>
-      <span class="badge badge-chuseok">추석선물</span>
-      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13736818731" target="_blank" rel="noopener">
-        <img src="https://shop-phinf.pstatic.net/20260828_250/1787883499177fiSWd_JPEG/122016302294139706_937518472.jpg?type=f300_300" alt="CJ 스팸복합 복 에디션 5세트 추석선물세트 스팸 식용유 소금 명절 답례품" loading="lazy">
-      </a>
-      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13736818731" target="_blank" rel="noopener" title="CJ 스팸복합 복 에디션 5세트 추석선물세트 스팸 식용유 소금 명절 답례품">CJ 스팸복합 복 에디션 5세트 추석선물세트 스팸 식용유 소금 명절 답례품</a></h3>
-      <span class="new-price">310,000원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="비비고 초사리곱창돌김 캔김 5세트 추석선물 25g 6캔 기업 학교 가정용 답례품" data-category="추석선물세트" data-trend-rank="5">
-      <div class="badges">
-        <span class="badge badge-trend">TREND</span>
-      </div>
-      <span class="badge badge-chuseok">추석선물</span>
-      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13735951922" target="_blank" rel="noopener">
-        <img src="https://shop-phinf.pstatic.net/20260827_118/1787816765912BdKIj_JPEG/79002945711499163_1155857768.jpg?type=f300_300" alt="비비고 초사리곱창돌김 캔김 5세트 추석선물 25g 6캔 기업 학교 가정용 답례품" loading="lazy">
-      </a>
-      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13735951922" target="_blank" rel="noopener" title="비비고 초사리곱창돌김 캔김 5세트 추석선물 25g 6캔 기업 학교 가정용 답례품">비비고 초사리곱창돌김 캔김 5세트 추석선물 25g 6캔 기업 학교 가정용 답례품</a></h3>
-      <span class="new-price">360,000원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="엘지선물세트 히말라야 핑크솔트 에센셜 N호 1박스 6개세트 추석선물세트" data-category="추석선물세트" data-trend-rank="6">
-      <div class="badges">
-        <span class="badge badge-trend">TREND</span>
-      </div>
-      <span class="badge badge-chuseok">추석선물</span>
-      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13735690356" target="_blank" rel="noopener">
-        <img src="https://shop-phinf.pstatic.net/20260827_82/1787802309651I6VxJ_JPEG/35046888716211064_185048851.jpg?type=f300_300" alt="엘지선물세트 히말라야 핑크솔트 에센셜 N호 1박스 6개세트 추석선물세트" loading="lazy">
-      </a>
-      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13735690356" target="_blank" rel="noopener" title="엘지선물세트 히말라야 핑크솔트 에센셜 N호 1박스 6개세트 추석선물세트">엘지선물세트 히말라야 핑크솔트 에센셜 N호 1박스 6개세트 추석선물세트</a></h3>
-      <span class="new-price">310,000원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="스팸8호 선물세트 200g 9캔 추석명절 선물세트 기업 학교 가정용" data-category="추석선물세트" data-trend-rank="7">
-      <div class="badges">
-        <span class="badge badge-trend">TREND</span>
-      </div>
-      <span class="badge badge-chuseok">추석선물</span>
-      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13735527863" target="_blank" rel="noopener">
-        <img src="https://shop-phinf.pstatic.net/20260827_137/1787792038988zfFKf_JPEG/17792492102173047_1617161878.jpg?type=f300_300" alt="스팸8호 선물세트 200g 9캔 추석명절 선물세트 기업 학교 가정용" loading="lazy">
-      </a>
-      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13735527863" target="_blank" rel="noopener" title="스팸8호 선물세트 200g 9캔 추석명절 선물세트 기업 학교 가정용">스팸8호 선물세트 200g 9캔 추석명절 선물세트 기업 학교 가정용</a></h3>
-      <span class="new-price">62,000원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="엘지선물세트 생활의 품격 ON호 명절 추석 5종 선물세트 기업 가정 학교" data-category="추석선물세트" data-trend-rank="8">
-      <div class="badges">
-        <span class="badge badge-trend">TREND</span>
-      </div>
-      <span class="badge badge-chuseok">추석선물</span>
-      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13735527741" target="_blank" rel="noopener">
-        <img src="https://shop-phinf.pstatic.net/20260827_237/1787792025607n6zep_JPEG/8501153201930505_1547529025.jpg?type=f300_300" alt="엘지선물세트 생활의 품격 ON호 명절 추석 5종 선물세트 기업 가정 학교" loading="lazy">
-      </a>
-      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13735527741" target="_blank" rel="noopener" title="엘지선물세트 생활의 품격 ON호 명절 추석 5종 선물세트 기업 가정 학교">엘지선물세트 생활의 품격 ON호 명절 추석 5종 선물세트 기업 가정 학교</a></h3>
-      <span class="new-price">28,000원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
-    </div>
-
-    <div class="card" data-name="동원 S12호 참치선물세트 90g 12캔 명절 추석 선물세트 기업 학교 가정용" data-category="추석선물세트" data-trend-rank="9">
-      <div class="badges">
-        <span class="badge badge-trend">TREND</span>
-      </div>
-      <span class="badge badge-chuseok">추석선물</span>
-      <a class="thumb" href="https://smartstore.naver.com/sosolittlestore/products/13735527576" target="_blank" rel="noopener">
-        <img src="https://shop-phinf.pstatic.net/20260827_226/1787792015460aUCnQ_JPEG/121924784600137527_739745683.jpg?type=f300_300" alt="동원 S12호 참치선물세트 90g 12캔 명절 추석 선물세트 기업 학교 가정용" loading="lazy">
-      </a>
-      <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13735527576" target="_blank" rel="noopener" title="동원 S12호 참치선물세트 90g 12캔 명절 추석 선물세트 기업 학교 가정용">동원 S12호 참치선물세트 90g 12캔 명절 추석 선물세트 기업 학교 가정용</a></h3>
-      <span class="new-price">70,000원</span>
-      <br>
-      <button onclick="addCart(this)">장바구니</button>
     </div>
 
     <div class="card" data-name="휴대편안 500ml 접이식 보온보냉 실리콘 텀블러 BPA FREE 선물용 인쇄가능" data-category="주방용품" data-trend-rank="10">
@@ -737,7 +1046,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301665" target="_blank" rel="noopener" title="휴대편안 500ml 접이식 보온보냉 실리콘 텀블러 BPA FREE 선물용 인쇄가능">휴대편안 500ml 접이식 보온보냉 실리콘 텀블러 BPA FREE 선물용 인쇄가능</a></h3>
       <span class="new-price">7,000원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="아코디언 접이식 휴대용 장바구니 시장가방" data-category="생활용품" data-trend-rank="11">
@@ -747,7 +1059,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13760198589" target="_blank" rel="noopener" title="아코디언 접이식 휴대용 장바구니 시장가방">아코디언 접이식 휴대용 장바구니 시장가방</a></h3>
       <span class="new-price">5,500원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="무릎담요 망토담요" data-category="생활용품" data-trend-rank="12">
@@ -757,7 +1072,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13751235232" target="_blank" rel="noopener" title="무릎담요 망토담요">무릎담요 망토담요</a></h3>
       <span class="new-price">9,500원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="부드러운 기모 안감 터치 니트 장갑" data-category="패션잡화" data-trend-rank="13">
@@ -767,7 +1085,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13750041872" target="_blank" rel="noopener" title="부드러운 기모 안감 터치 니트 장갑">부드러운 기모 안감 터치 니트 장갑</a></h3>
       <span class="new-price">4,500원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="악세사리보관함(여행용/휴대용)" data-category="패션잡화" data-trend-rank="14">
@@ -777,7 +1098,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13749935220" target="_blank" rel="noopener" title="악세사리보관함(여행용/휴대용)">악세사리보관함(여행용/휴대용)</a></h3>
       <span class="new-price">2,500원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="자석구름택배칼 미니커터칼 안전칼" data-category="문구장난감" data-trend-rank="15">
@@ -787,7 +1111,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13742329407" target="_blank" rel="noopener" title="자석구름택배칼 미니커터칼 안전칼">자석구름택배칼 미니커터칼 안전칼</a></h3>
       <span class="new-price">2,500원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="휴대용 곰돌이 경보기" data-category="생활용품" data-trend-rank="16">
@@ -797,7 +1124,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13742167177" target="_blank" rel="noopener" title="휴대용 곰돌이 경보기">휴대용 곰돌이 경보기</a></h3>
       <span class="new-price">4,500원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="휴대편안 손잡이 스텐 텀블러 보온보냉 350ml 500ml 판촉물 사은품 인쇄" data-category="주방용품" data-trend-rank="17">
@@ -807,7 +1137,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301662" target="_blank" rel="noopener" title="휴대편안 손잡이 스텐 텀블러 보온보냉 350ml 500ml 판촉물 사은품 인쇄">휴대편안 손잡이 스텐 텀블러 보온보냉 350ml 500ml 판촉물 사은품 인쇄</a></h3>
       <span class="new-price">9,900원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="초미니 키링안경 휴대용 보관 다리없는 접이식 돋보기 선물용" data-category="생활용품" data-trend-rank="18">
@@ -817,7 +1150,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301650" target="_blank" rel="noopener" title="초미니 키링안경 휴대용 보관 다리없는 접이식 돋보기 선물용">초미니 키링안경 휴대용 보관 다리없는 접이식 돋보기 선물용</a></h3>
       <span class="new-price">7,400원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="싱크대물받이 실리콘패드 물튐방지 배수매트 수도꼭지물받이 물때방지 주방정리 4컬러" data-category="주방용품" data-trend-rank="19">
@@ -827,7 +1163,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301652" target="_blank" rel="noopener" title="싱크대물받이 실리콘패드 물튐방지 배수매트 수도꼭지물받이 물때방지 주방정리 4컬러">싱크대물받이 실리콘패드 물튐방지 배수매트 수도꼭지물받이 물때방지 주방정리 4컬러</a></h3>
       <span class="new-price">5,900원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="[지앤지] 가벼운 메쉬 필통 파우치" data-category="문구장난감" data-trend-rank="20">
@@ -837,7 +1176,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13728967663" target="_blank" rel="noopener" title="[지앤지] 가벼운 메쉬 필통 파우치">[지앤지] 가벼운 메쉬 필통 파우치</a></h3>
       <span class="new-price">4,000원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="여성 투명 PVC 미니파우치" data-category="패션잡화" data-trend-rank="21">
@@ -847,7 +1189,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13717674555" target="_blank" rel="noopener" title="여성 투명 PVC 미니파우치">여성 투명 PVC 미니파우치</a></h3>
       <span class="new-price">2,500원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="투명 1000ml 대용량 눈금 계량컵 V자 입구 베이킹 요리 계량용기" data-category="주방용품" data-trend-rank="22">
@@ -857,7 +1202,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301664" target="_blank" rel="noopener" title="투명 1000ml 대용량 눈금 계량컵 V자 입구 베이킹 요리 계량용기">투명 1000ml 대용량 눈금 계량컵 V자 입구 베이킹 요리 계량용기</a></h3>
       <span class="new-price">7,990원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="휴대용 리필형 배변봉투 15매 1롤 알약케이스 산책 외출 용품" data-category="생활용품" data-trend-rank="23">
@@ -867,7 +1215,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301659" target="_blank" rel="noopener" title="휴대용 리필형 배변봉투 15매 1롤 알약케이스 산책 외출 용품">휴대용 리필형 배변봉투 15매 1롤 알약케이스 산책 외출 용품</a></h3>
       <span class="new-price">2,000원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="디지털파우치 충전기수납케이스 USB케이블정리함 이어폰보관 휴대용 생활방수 멀티파우치" data-category="패션잡화" data-trend-rank="24">
@@ -877,7 +1228,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301654" target="_blank" rel="noopener" title="디지털파우치 충전기수납케이스 USB케이블정리함 이어폰보관 휴대용 생활방수 멀티파우치">디지털파우치 충전기수납케이스 USB케이블정리함 이어폰보관 휴대용 생활방수 멀티파우치</a></h3>
       <span class="new-price">2,300원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="휴대편한 일회용 우비 남녀공용 성인용 아동용 5색상 단추형 비옷" data-category="패션잡화" data-trend-rank="25">
@@ -887,7 +1241,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301663" target="_blank" rel="noopener" title="휴대편한 일회용 우비 남녀공용 성인용 아동용 5색상 단추형 비옷">휴대편한 일회용 우비 남녀공용 성인용 아동용 5색상 단추형 비옷</a></h3>
       <span class="new-price">2,100원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="휴대편한 고리형 손잡이 3단 자동우산 UV 99% 차단 자동버튼" data-category="패션잡화" data-trend-rank="26">
@@ -897,7 +1254,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301658" target="_blank" rel="noopener" title="휴대편한 고리형 손잡이 3단 자동우산 UV 99% 차단 자동버튼">휴대편한 고리형 손잡이 3단 자동우산 UV 99% 차단 자동버튼</a></h3>
       <span class="new-price">9,200원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="멀티 뽀송 수세미 거치대 2color / 싱크대 수세미홀더 정리함" data-category="주방용품" data-trend-rank="27">
@@ -907,7 +1267,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13717642678" target="_blank" rel="noopener" title="멀티 뽀송 수세미 거치대 2color / 싱크대 수세미홀더 정리함">멀티 뽀송 수세미 거치대 2color / 싱크대 수세미홀더 정리함</a></h3>
       <span class="new-price">4,900원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="대나무 접시정리대 도마 식기거치대 접시보관대 주방정리 대사이즈" data-category="주방용품" data-trend-rank="28">
@@ -917,7 +1280,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301648" target="_blank" rel="noopener" title="대나무 접시정리대 도마 식기거치대 접시보관대 주방정리 대사이즈">대나무 접시정리대 도마 식기거치대 접시보관대 주방정리 대사이즈</a></h3>
       <span class="new-price">5,500원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="쿨 아이스 냉감 반팔 남성 티셔츠" data-category="패션잡화" data-trend-rank="29">
@@ -927,7 +1293,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13719930433" target="_blank" rel="noopener" title="쿨 아이스 냉감 반팔 남성 티셔츠">쿨 아이스 냉감 반팔 남성 티셔츠</a></h3>
       <span class="new-price">4,900원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="축구공 회전 먼지 거름망 1P (3색상) 필터볼 세탁기 이물질거름망" data-category="생활용품" data-trend-rank="30">
@@ -937,7 +1306,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301657" target="_blank" rel="noopener" title="축구공 회전 먼지 거름망 1P (3색상) 필터볼 세탁기 이물질거름망">축구공 회전 먼지 거름망 1P (3색상) 필터볼 세탁기 이물질거름망</a></h3>
       <span class="new-price">2,300원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="니트 로프 손가방 미니백 시즌별 활용도 높은 데일리가방" data-category="패션잡화" data-trend-rank="31">
@@ -947,7 +1319,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301656" target="_blank" rel="noopener" title="니트 로프 손가방 미니백 시즌별 활용도 높은 데일리가방">니트 로프 손가방 미니백 시즌별 활용도 높은 데일리가방</a></h3>
       <span class="new-price">6,400원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="남대문 히트템, 남대문 핫템. 구슬마사지기" data-category="생활용품" data-trend-rank="32">
@@ -957,7 +1332,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13725208528" target="_blank" rel="noopener" title="남대문 히트템, 남대문 핫템. 구슬마사지기">남대문 히트템, 남대문 핫템. 구슬마사지기</a></h3>
       <span class="new-price">10,900원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="남대문 히트템, 문어 괄사 마사지기" data-category="생활용품" data-trend-rank="33">
@@ -967,7 +1345,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13719930878" target="_blank" rel="noopener" title="남대문 히트템, 문어 괄사 마사지기">남대문 히트템, 문어 괄사 마사지기</a></h3>
       <span class="new-price">2,000원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="전자레인지용 찜기 중형 소형 세트" data-category="주방용품" data-trend-rank="34">
@@ -977,7 +1358,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13719930756" target="_blank" rel="noopener" title="전자레인지용 찜기 중형 소형 세트">전자레인지용 찜기 중형 소형 세트</a></h3>
       <span class="new-price">12,140원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="가볍고 편한 국산 지압슬리퍼" data-category="생활용품" data-trend-rank="35">
@@ -987,7 +1371,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13717674333" target="_blank" rel="noopener" title="가볍고 편한 국산 지압슬리퍼">가볍고 편한 국산 지압슬리퍼</a></h3>
       <span class="new-price">10,230원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="비누 크런치 슬랑이 말랑이 스퀴시 크랑이 스트레스해소 촉감놀이 슬라임" data-category="문구장난감" data-trend-rank="36">
@@ -997,7 +1384,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13702536317" target="_blank" rel="noopener" title="비누 크런치 슬랑이 말랑이 스퀴시 크랑이 스트레스해소 촉감놀이 슬라임">비누 크런치 슬랑이 말랑이 스퀴시 크랑이 스트레스해소 촉감놀이 슬라임</a></h3>
       <span class="new-price">4,500원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="큐브 치즈 크런치 슬랑이 말랑이 선물용 추천 스트레스 완화" data-category="문구장난감" data-trend-rank="37">
@@ -1007,7 +1397,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13702516603" target="_blank" rel="noopener" title="큐브 치즈 크런치 슬랑이 말랑이 선물용 추천 스트레스 완화">큐브 치즈 크런치 슬랑이 말랑이 선물용 추천 스트레스 완화</a></h3>
       <span class="new-price">5,100원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="러닝양말 발바닥두꺼운쿠션양말 발바닥통증" data-category="패션잡화" data-trend-rank="38">
@@ -1017,7 +1410,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301661" target="_blank" rel="noopener" title="러닝양말 발바닥두꺼운쿠션양말 발바닥통증">러닝양말 발바닥두꺼운쿠션양말 발바닥통증</a></h3>
       <span class="new-price">2,400원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="전자레인지덮개 푸드커버28cm" data-category="주방용품" data-trend-rank="39">
@@ -1027,7 +1423,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301653" target="_blank" rel="noopener" title="전자레인지덮개 푸드커버28cm">전자레인지덮개 푸드커버28cm</a></h3>
       <span class="new-price">6,000원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="세면대 수전연장 각도조절 워터탭 절수노즐 360도회전 간편설치 내경22mm 전용" data-category="욕실용품" data-trend-rank="40">
@@ -1037,7 +1436,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301651" target="_blank" rel="noopener" title="세면대 수전연장 각도조절 워터탭 절수노즐 360도회전 간편설치 내경22mm 전용">세면대 수전연장 각도조절 워터탭 절수노즐 360도회전 간편설치 내경22mm 전용</a></h3>
       <span class="new-price">11,500원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
 
     <div class="card" data-name="세라믹 라면기 손잡이 도자기 면기 국그릇 패킹뚜껑 날짜표시 전자레인지용기 2컬러" data-category="주방용품" data-trend-rank="41">
@@ -1047,7 +1449,10 @@
       <h3><a href="https://smartstore.naver.com/sosolittlestore/products/13697301649" target="_blank" rel="noopener" title="세라믹 라면기 손잡이 도자기 면기 국그릇 패킹뚜껑 날짜표시 전자레인지용기 2컬러">세라믹 라면기 손잡이 도자기 면기 국그릇 패킹뚜껑 날짜표시 전자레인지용기 2컬러</a></h3>
       <span class="new-price">12,900원</span>
       <br>
-      <button onclick="addCart(this)">장바구니</button>
+      <div class="buy">
+        <div class="qty"><button type="button" onclick="stepQty(this, -1)" aria-label="수량 빼기">−</button><span>1</span><button type="button" onclick="stepQty(this, 1)" aria-label="수량 더하기">+</button></div>
+        <button type="button" class="add" onclick="addCart(this)">장바구니</button>
+      </div>
     </div>
   </div>
 
@@ -1101,16 +1506,230 @@
     <p class="copyright">© 2026 SOSO LITTLE STORE</p>
   </footer>
 
+  <!-- 어두운 배경 (누르면 열린 창 닫힘) -->
+  <div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+  <!-- 로그인 창 -->
+  <div class="login-modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <button type="button" class="close-btn" onclick="closeAll()" aria-label="닫기">×</button>
+    <p class="eng">Member Login</p>
+    <h2 id="loginTitle">로그인</h2>
+    <form onsubmit="return submitLogin(this)">
+      <input type="text" name="id" placeholder="아이디" autocomplete="username" required>
+      <input type="password" name="pw" placeholder="비밀번호" autocomplete="current-password" required>
+      <label class="login-keep"><input type="checkbox"> 로그인 상태 유지</label>
+      <button type="submit" class="btn-dark">로그인</button>
+    </form>
+    <div class="login-links">
+      <a href="#" onclick="showToast('회원가입은 준비 중이에요.'); return false;">회원가입</a>
+      <a href="#" onclick="showToast('아이디 찾기는 준비 중이에요.'); return false;">아이디 찾기</a>
+      <a href="#" onclick="showToast('비밀번호 찾기는 준비 중이에요.'); return false;">비밀번호 찾기</a>
+    </div>
+    <div class="login-or">또는</div>
+    <a class="btn-light" href="https://smartstore.naver.com/sosolittlestore" target="_blank" rel="noopener">스마트스토어에서 주문하기</a>
+  </div>
+
+  <!-- 장바구니 (오른쪽에서 열림) -->
+  <aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+    <div class="cart-head">
+      <p class="eng">Shopping Bag</p>
+      <h2 id="cartTitle">장바구니</h2>
+      <button type="button" class="close-btn" onclick="closeAll()" aria-label="닫기">×</button>
+    </div>
+    <ul class="cart-list" id="cartList"></ul>
+    <div class="cart-foot">
+      <div class="cart-total">총 상품금액 <strong id="cartTotal">0원</strong></div>
+      <a class="btn-dark" href="https://smartstore.naver.com/sosolittlestore" target="_blank" rel="noopener">스마트스토어에서 구매하기</a>
+      <p class="cart-note">결제는 네이버 스마트스토어에서 진행됩니다. 상품명을 누르면 해당 상품으로 이동해요.</p>
+    </div>
+  </aside>
+
+  <!-- 알림 메시지 -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <script>
-    // 버튼을 누르면 알림창을 띄우는 함수
-    function showAlert(message) {
-      alert(message);
+    // ===== 알림 메시지 (화면 아래에 잠깐 떴다 사라짐) =====
+    var toastTimer;
+    function showToast(message) {
+      var toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () {
+        toast.classList.remove('show');
+      }, 2200);
     }
 
-    // 장바구니 버튼: 카드에 저장된 상품명을 읽어서 알림
+    // ===== 장바구니 (이 브라우저에만 저장) =====
+    var CART_KEY = 'sosoCart';
+    var cart = [];
+    try {
+      cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    } catch (e) {
+      cart = [];
+    }
+
+    function saveCart() {
+      try {
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      } catch (e) {}
+    }
+
+    function won(n) {
+      return n.toLocaleString('ko-KR') + '원';
+    }
+
+    // 상품 카드의 − / + 버튼: 담을 수량 고르기 (1 ~ 99)
+    function stepQty(btn, diff) {
+      var num = btn.parentNode.querySelector('span');
+      var n = parseInt(num.textContent, 10) + diff;
+      num.textContent = Math.min(99, Math.max(1, n));
+    }
+
+    // 상품 카드의 장바구니 버튼: 고른 수량만큼 담기
     function addCart(btn) {
       var card = btn.closest('.card');
-      showAlert(card.dataset.name + '\n장바구니에 담았어요! 🛒');
+      var link = card.querySelector('.thumb');
+      var img = card.querySelector('.thumb img');
+      var num = card.querySelector('.buy .qty span');
+      var qty = parseInt(num.textContent, 10) || 1;
+      var url = link.href;
+      var item = cart.find(function (it) { return it.url === url; });
+      if (item) {
+        item.qty += qty;
+      } else {
+        cart.push({
+          url: url,
+          name: card.dataset.name,
+          price: parseInt(card.querySelector('.new-price').textContent.replace(/[^0-9]/g, ''), 10) || 0,
+          img: img ? img.src : '',
+          qty: qty
+        });
+      }
+      num.textContent = 1;
+      saveCart();
+      renderCart();
+      showToast('장바구니에 ' + qty + '개 담았어요.');
+    }
+
+    function changeQty(index, diff) {
+      cart[index].qty += diff;
+      if (cart[index].qty < 1) {
+        cart.splice(index, 1);
+      }
+      saveCart();
+      renderCart();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      saveCart();
+      renderCart();
+    }
+
+    // 장바구니 목록 · 개수 · 총액 다시 그리기
+    function renderCart() {
+      var list = document.getElementById('cartList');
+      var count = 0;
+      var total = 0;
+      list.innerHTML = '';
+
+      cart.forEach(function (it, i) {
+        count += it.qty;
+        total += it.price * it.qty;
+
+        var li = document.createElement('li');
+        li.className = 'cart-item';
+
+        var img = document.createElement('img');
+        img.src = it.img;
+        img.alt = '';
+
+        var info = document.createElement('div');
+        var name = document.createElement('a');
+        name.className = 'cart-item-name';
+        name.href = it.url;
+        name.target = '_blank';
+        name.rel = 'noopener';
+        name.textContent = it.name;
+
+        var row = document.createElement('div');
+        row.className = 'cart-item-row';
+        var qty = document.createElement('div');
+        qty.className = 'qty';
+        var minus = document.createElement('button');
+        minus.type = 'button';
+        minus.textContent = '−';
+        minus.setAttribute('aria-label', '수량 빼기');
+        minus.onclick = function () { changeQty(i, -1); };
+        var num = document.createElement('span');
+        num.textContent = it.qty;
+        var plus = document.createElement('button');
+        plus.type = 'button';
+        plus.textContent = '+';
+        plus.setAttribute('aria-label', '수량 더하기');
+        plus.onclick = function () { changeQty(i, 1); };
+        qty.append(minus, num, plus);
+
+        var price = document.createElement('span');
+        price.className = 'cart-item-price';
+        price.textContent = won(it.price * it.qty);
+        row.append(qty, price);
+
+        var remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'cart-item-remove';
+        remove.textContent = '삭제';
+        remove.onclick = function () { removeItem(i); };
+
+        info.append(name, row, remove);
+        li.append(img, info);
+        list.appendChild(li);
+      });
+
+      if (cart.length === 0) {
+        list.innerHTML = '<li class="cart-empty">장바구니가 비어 있어요.</li>';
+      }
+      document.getElementById('cartCount').textContent = count;
+      document.getElementById('cartTotal').textContent = won(total);
+    }
+
+    // ===== 로그인 창 · 장바구니 열고 닫기 =====
+    function openLogin() {
+      closeAll();
+      document.getElementById('loginModal').classList.add('show');
+      document.getElementById('overlay').classList.add('show');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function () {
+        document.querySelector('#loginModal input[name="id"]').focus();
+      }, 50);
+    }
+
+    function openCart() {
+      closeAll();
+      renderCart();
+      document.getElementById('cartDrawer').classList.add('show');
+      document.getElementById('overlay').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAll() {
+      document.getElementById('loginModal').classList.remove('show');
+      document.getElementById('cartDrawer').classList.remove('show');
+      document.getElementById('overlay').classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { closeAll(); }
+    });
+
+    // 로그인: 아직 회원 서버가 없어서 입력 내용은 어디에도 보내거나 저장하지 않음
+    function submitLogin(form) {
+      form.reset();
+      closeAll();
+      showToast('회원 로그인은 준비 중이에요. 주문은 스마트스토어에서 하실 수 있어요.');
+      return false;
     }
 
     // 카테고리 클릭 -> 그 카테고리 상품만 보이기 ('전체'는 전부)
@@ -1135,6 +1754,12 @@
         });
         a.querySelector('.count').textContent = n;
       });
+      // 목록에서 빠진 상품은 장바구니에서도 정리
+      var urls = [];
+      document.querySelectorAll('.card .thumb').forEach(function (t) { urls.push(t.href); });
+      cart = cart.filter(function (it) { return urls.indexOf(it.url) !== -1; });
+      saveCart();
+      renderCart();
     });
   </script>
 
